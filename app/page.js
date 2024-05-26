@@ -5,10 +5,10 @@ import React, { useState } from 'react';
 import CusipDetails from '../components/cusipDetails';
 
 export default function Home() {
-  const [cusip, setCusip] = useState(null)
+  const [cusips, setCusips] = useState([])
 
-  const handleClick = () => {
-    setCusip("91282CJY8")
+  const handleAddClick = () => {
+    setCusips([...cusips, ""])
   }
 
   return (
@@ -22,9 +22,10 @@ export default function Home() {
           Something something here
         </p>
 
-        <button onClick={handleClick}>GO</button>
-        {cusip && <CusipDetails cusip={cusip} />}
-
+        {cusips.map((_, index) =>
+          <CusipDetails key={index} index={index} />
+        )}
+        <button onClick={handleAddClick}>Add New</button>
       </main>
 
       <footer className={styles.footer}>
