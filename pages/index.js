@@ -1,62 +1,76 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
-export default function Home() {
+
+export async function getStaticProps() {
+  let cusip = "912810SG4"
+  let url = `https://www.treasurydirect.gov/TA_WS/secindex/search?cusip=${cusip}&format=json&filterscount=0&groupscount=0&sortdatafield=indexDate&sortorder=desc`
+  let response = await fetch(url)
+  let data = await response.json()
+
+  let cpiEntries = data.map(entry => {
+    return {
+      uniqueKey: `${entry.cusip}_${entry.indexDate}_${entry.updateTimeStamp}`,
+      dailyIndex: entry.dailyIndex,
+      indexDate: entry.indexDate,
+      updateTimeStamp: entry.updateTimeStamp
+    }
+  })
+
+  return {
+    props: {
+      cusip,
+      cpiEntries,
+    },
+  };
+}
+
+export default function Home({ cusip, cpiEntries }) {
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>TIPS Calculator</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          TIPS Calculator
         </h1>
 
         <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
+          Something something here
         </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <p>CUSIP: {cusip}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Index Ratio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cpiEntries.map(entry =>
+              <tr key={entry.uniqueKey}>
+                <td>{new Date(entry.indexDate).toLocaleDateString()}</td>
+                <td>{entry.dailyIndex}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
       </main>
 
       <footer>
         <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          href="https://github.com/dabutvin/tips-calculator"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
+          Open Source on GitHub{' '}
+          <img src="/github-mark.svg" alt="GitHub" className={styles.logo} />
         </a>
       </footer>
 
