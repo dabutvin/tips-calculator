@@ -1,27 +1,15 @@
 'use client'
 
 import styles from '../styles/Home.module.css'
-import React, { useState } from 'react'
-import CusipDetails from '../components/cusipDetails'
+import CusipList from '../components/cusipList'
 
 export default function Home() {
-    const [cusips, setCusips] = useState([])
-
-    const handleAddClick = () => {
-        setCusips([...cusips, ''])
-    }
-
     return (
         <div className={styles.container}>
             <main className={styles.main}>
                 <h1 className={styles.title}>TIPS Calculator</h1>
-
                 <p className={styles.description}>Something something here</p>
-
-                {cusips.map((_, index) => (
-                    <CusipDetails key={index} index={index} />
-                ))}
-                <button onClick={handleAddClick}>Add New</button>
+                <CusipList />
             </main>
 
             <footer className={styles.footer}>
