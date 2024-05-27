@@ -5,12 +5,12 @@ export async function getCpiEntries(cusip) {
     let response = await fetch(url)
     let data = await response.json()
 
-    return data.map(entry => {
+    return data.map((entry) => {
         return {
             uniqueKey: `${entry.cusip}_${entry.indexDate}_${entry.updateTimeStamp}`,
             dailyIndex: entry.dailyIndex,
             indexDate: entry.indexDate,
-            updateTimeStamp: entry.updateTimeStamp
+            updateTimeStamp: entry.updateTimeStamp,
         }
     })
 }
