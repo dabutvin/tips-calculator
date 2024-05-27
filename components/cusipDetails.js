@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from "react"
-import { getCpiEntries } from "../actions/treasuryApi"
+import { useEffect, useState } from 'react'
+import { getCpiEntries } from '../actions/treasuryApi'
 
 export default function CusipDetails({ index }) {
-    const [cusip, setCusip] = useState("")
+    const [cusip, setCusip] = useState('')
     const [cpiEntries, setCpiEntries] = useState([])
     useEffect(() => {
         const fetchData = async () => {
@@ -24,8 +24,15 @@ export default function CusipDetails({ index }) {
         <>
             {!cusip && (
                 <>
-                    <label htmlFor={`${index}_cusip`}>CUSIP:</label>
-                    <input id={`${index}_cusip`} type="text" value={cusip} onChange={handleCusipChange} />
+                    <label htmlFor={`${index}_cusip`}>
+                        CUSIP:{' '}
+                        <input
+                            id={`${index}_cusip`}
+                            type="text"
+                            value={cusip}
+                            onChange={handleCusipChange}
+                        />
+                    </label>
                 </>
             )}
             {cusip && <p>CUSIP: {cusip}</p>}
@@ -37,12 +44,12 @@ export default function CusipDetails({ index }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {cpiEntries?.map(entry =>
+                    {cpiEntries?.map((entry) => (
                         <tr key={entry.uniqueKey}>
                             <td>{new Date(entry.indexDate).toLocaleDateString()}</td>
                             <td>{entry.dailyIndex}</td>
                         </tr>
-                    )}
+                    ))}
                 </tbody>
             </table>
         </>
