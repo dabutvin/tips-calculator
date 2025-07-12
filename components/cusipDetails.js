@@ -103,11 +103,20 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
                     data={cpiChartData}
                     margin={{ top: 20, right: 10, bottom: 10, left: 10 }}
                 >
-                    <Line type="monotone" dataKey="dailyIndex" stroke="#8884d8" />
+                    <Line type="monotone" dataKey="dailyAdjustedPrincipal" stroke="#8884d8" />
                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                    <XAxis dataKey="indexDate" />
-                    <YAxis type="number" />
-                    <Tooltip />
+                    <XAxis 
+                        dataKey="indexDate" 
+                        interval={Math.floor(cpiChartData.length / 6)}
+                        tickFormatter={(value) => {
+                            const date = new Date(value);
+                            const month = (date.getMonth() + 1).toString();
+                            const year = date.getFullYear().toString().slice(-2);
+                            return `${month}/${year}`;
+                        }} 
+                    />
+                    <YAxis type="number" tickFormatter={(value) => `$${value}`} />
+                    <Tooltip formatter={(value) => [`$${value}`, 'Daily Adjusted Principal']} />
                 </LineChart>
             )}
 
