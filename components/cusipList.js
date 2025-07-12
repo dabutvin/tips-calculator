@@ -10,12 +10,15 @@ import {
     removeCusipFromStorage,
     isLocalStorageAvailable,
 } from '../utils/localStorage'
+import { validateCusip, validateOriginalPrincipal } from '../utils/validation'
 
 export default function CusipList() {
     const [cusips, setCusips] = useState([])
     const [storageAvailable, setStorageAvailable] = useState(true)
     const [loading, setLoading] = useState(true)
     const [notification, setNotification] = useState(null)
+    const [cusipError, setCusipError] = useState('')
+    const [originalPrincipalError, setOriginalPrincipalError] = useState('')
 
     // Show notification helper (only for errors)
     const showNotification = (message, type = 'error') => {
@@ -59,9 +62,26 @@ export default function CusipList() {
     const handleNewCusip = (event) => {
         event.preventDefault()
 
+        const cusipId = event.target['cusipId'].value.trim()
+        const originalPrincipal = event.target['originalPrincipal'].value.trim()
+
+        // Validate CUSIP before submission
+        const validationError = validateCusip(cusipId)
+        if (validationError) {
+            setCusipError(validationError)
+            return
+        }
+
+        // Validate original principal before submission
+        const originalPrincipalValidationError = validateOriginalPrincipal(originalPrincipal)
+        if (originalPrincipalValidationError) {
+            setOriginalPrincipalError(originalPrincipalValidationError)
+            return
+        }
+
         const newCusip = {
-            cusipId: event.target['cusipId'].value,
-            originalPrincipal: event.target['originalPrincipal'].value,
+            cusipId: cusipId,
+            originalPrincipal: originalPrincipal,
         }
 
         // Update local state
@@ -77,6 +97,9 @@ export default function CusipList() {
             }
         }
 
+        // Reset form
+        setCusipError('')
+        setOriginalPrincipalError('')
         event.target.reset()
     }
 
@@ -121,14 +144,64 @@ export default function CusipList() {
             <form onSubmit={handleNewCusip}>
                 <div>
                     <label>
-                        CUSIP: <input name="cusipId" type="text" required />
+                        CUSIP:{' '}
+                        <input
+                            name="cusipId"
+                            type="text"
+                            maxLength={9}
+                            placeholder="Enter 9-character CUSIP"
+                            style={{
+                                border: cusipError ? '2px solid #dc3545' : '1px solid #ccc',
+                                borderRadius: '4px',
+                                padding: '8px',
+                                fontSize: '14px',
+                            }}
+                            required
+                        />
                     </label>
+                    {cusipError && (
+                        <div
+                            style={{
+                                color: '#dc3545',
+                                fontSize: '12px',
+                                marginTop: '4px',
+                                marginBottom: '8px',
+                            }}
+                        >
+                            {cusipError}
+                        </div>
+                    )}
                 </div>
                 <div>
                     <label>
                         Original Principal:{' '}
-                        <input name="originalPrincipal" type="number" required />
+                        <input
+                            name="originalPrincipal"
+                            type="number"
+                            placeholder="Enter dollar amount"
+                            style={{
+                                border: originalPrincipalError
+                                    ? '2px solid #dc3545'
+                                    : '1px solid #ccc',
+                                borderRadius: '4px',
+                                padding: '8px',
+                                fontSize: '14px',
+                            }}
+                            required
+                        />
                     </label>
+                    {originalPrincipalError && (
+                        <div
+                            style={{
+                                color: '#dc3545',
+                                fontSize: '12px',
+                                marginTop: '4px',
+                                marginBottom: '8px',
+                            }}
+                        >
+                            {originalPrincipalError}
+                        </div>
+                    )}
                 </div>
                 <button type="submit">Add</button>
             </form>

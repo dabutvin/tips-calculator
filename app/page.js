@@ -34,7 +34,7 @@ export default function Home() {
                             fontSize: '16px',
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '8px'
+                            gap: '8px',
                         }}
                     >
                         What are TIPS? →

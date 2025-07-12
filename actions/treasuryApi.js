@@ -163,11 +163,11 @@ export async function getSecurityDetails(cusip) {
     let url = `https://www.treasurydirect.gov/TA_WS/securities/search?format=json&type=TIPS&cusip=${cusip}`
     let response = await fetch(url)
     let data = await response.json()
-    
+
     // Handle empty response (invalid CUSIP)
     if (!data || data.length === 0) {
         throw new Error(`No security details found for CUSIP: ${cusip}`)
     }
-    
+
     return data.pop() // take the last item in the list, re-issues are further up
 }

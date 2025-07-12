@@ -21,7 +21,7 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
             try {
                 setError(null)
                 setIsLoading(true)
-                
+
                 let cpiEntriesResponse = await getCpiEntries(cusip)
                 setCpiEntries(cpiEntriesResponse)
 
@@ -59,7 +59,7 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
                 setIsLoading(false)
             }
         }
-        
+
         if (cusip) {
             fetchData()
         } else {
@@ -74,14 +74,16 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
     if (error) {
         return (
             <div className={styles.cusipDetails}>
-                <div style={{ 
-                    color: '#dc3545', 
-                    backgroundColor: '#f8d7da', 
-                    border: '1px solid #f5c6cb',
-                    borderRadius: '4px',
-                    padding: '10px',
-                    marginBottom: '10px'
-                }}>
+                <div
+                    style={{
+                        color: '#dc3545',
+                        backgroundColor: '#f8d7da',
+                        border: '1px solid #f5c6cb',
+                        borderRadius: '4px',
+                        padding: '10px',
+                        marginBottom: '10px',
+                    }}
+                >
                     <strong>Error:</strong> {error}
                 </div>
                 <table>
