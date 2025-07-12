@@ -15,6 +15,7 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
     const [cpiChartData, setCpiChartData] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [isCpiEntriesCollapsed, setIsCpiEntriesCollapsed] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -167,31 +168,46 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
 
             {cpiEntries && (
                 <div className={styles.cpiEntries}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Index Ratio</th>
-                                <th>Daily Adjusted Principal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cpiEntries?.map((entry) => (
-                                <tr
-                                    key={entry.uniqueKey}
-                                    className={
-                                        entry.dailyIndex == currentCpiEntry?.dailyIndex
-                                            ? styles.current
-                                            : ''
-                                    }
-                                >
-                                    <td>{new Date(entry.indexDate).toLocaleDateString()}</td>
-                                    <td>{entry.dailyIndex}</td>
-                                    <td>{`$${Number(entry.dailyIndex * originalPrincipal).toFixed(2)}`}</td>
+                    <div
+                        className={`${styles.tableContainer} ${isCpiEntriesCollapsed ? styles.collapsed : ''}`}
+                    >
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th
+                                        className={styles.caretHeader}
+                                        onClick={() =>
+                                            setIsCpiEntriesCollapsed(!isCpiEntriesCollapsed)
+                                        }
+                                    >
+                                        <span className={styles.caret}>
+                                            {isCpiEntriesCollapsed ? '▶' : '▼'}
+                                        </span>
+                                    </th>
+                                    <th>Date</th>
+                                    <th>Index Ratio</th>
+                                    <th>Daily Adjusted Principal</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {cpiEntries?.map((entry, index) => (
+                                    <tr
+                                        key={entry.uniqueKey}
+                                        className={`${
+                                            entry.dailyIndex == currentCpiEntry?.dailyIndex
+                                                ? styles.current
+                                                : ''
+                                        } ${isCpiEntriesCollapsed && index >= 5 ? styles.fadeOut : ''}`}
+                                    >
+                                        <td></td>
+                                        <td>{new Date(entry.indexDate).toLocaleDateString()}</td>
+                                        <td>{entry.dailyIndex}</td>
+                                        <td>{`$${Number(entry.dailyIndex * originalPrincipal).toFixed(2)}`}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
         </div>
