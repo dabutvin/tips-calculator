@@ -28,6 +28,63 @@ export default function Resources() {
                     </section>
 
                     <section style={{ marginBottom: '40px' }}>
+                        <h2 style={{ color: '#0070f3', marginBottom: '20px' }}>Sample TIPS CUSIPs</h2>
+                        <p style={{ marginBottom: '15px' }}>
+                            Don't have a CUSIP handy? Try these sample TIPS CUSIPs in the calculator to see how it works:
+                        </p>
+                        <div style={{ 
+                            display: 'grid', 
+                            gap: '15px',
+                            marginBottom: '20px'
+                        }}>
+                            <div style={{ 
+                                border: '1px solid #eaeaea', 
+                                borderRadius: '8px', 
+                                padding: '15px',
+                                backgroundColor: '#f8f9fa'
+                            }}>
+                                <strong style={{ color: '#333' }}>91282CGK1</strong>
+                                <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>
+                                    1.125% 10-Year TIPS due January 15, 2033
+                                </p>
+                            </div>
+                            <div style={{ 
+                                border: '1px solid #eaeaea', 
+                                borderRadius: '8px', 
+                                padding: '15px',
+                                backgroundColor: '#f8f9fa'
+                            }}>
+                                <strong style={{ color: '#333' }}>912828Y38</strong>
+                                <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>
+                                    0.75% 10-Year TIPS due July 15, 2028
+                                </p>
+                            </div>
+                            <div style={{ 
+                                border: '1px solid #eaeaea', 
+                                borderRadius: '8px', 
+                                padding: '15px',
+                                backgroundColor: '#f8f9fa'
+                            }}>
+                                <strong style={{ color: '#333' }}>912828WU0</strong>
+                                <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>
+                                    0.125% 10-Year TIPS due July 15, 2024
+                                </p>
+                            </div>
+                            <div style={{ 
+                                border: '1px solid #eaeaea', 
+                                borderRadius: '8px', 
+                                padding: '15px',
+                                backgroundColor: '#f8f9fa'
+                            }}>
+                                <strong style={{ color: '#333' }}>912810TP3</strong>
+                                <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>
+                                    1.5% 30-Year TIPS due February 15, 2053
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section style={{ marginBottom: '40px' }}>
                         <h2 style={{ color: '#0070f3', marginBottom: '20px' }}>Helpful Resources</h2>
                         
                         <div style={{ display: 'grid', gap: '20px' }}>
