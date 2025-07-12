@@ -175,20 +175,35 @@ export default function CusipList() {
                 <div>
                     <label>
                         Original Principal:{' '}
-                        <input
-                            name="originalPrincipal"
-                            type="number"
-                            placeholder="Enter dollar amount"
-                            style={{
-                                border: originalPrincipalError
-                                    ? '2px solid #dc3545'
-                                    : '1px solid #ccc',
-                                borderRadius: '4px',
-                                padding: '8px',
-                                fontSize: '14px',
-                            }}
-                            required
-                        />
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                            <span
+                                style={{
+                                    position: 'absolute',
+                                    left: '8px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    color: '#666',
+                                    fontSize: '14px',
+                                    zIndex: 1,
+                                }}
+                            >
+                                $
+                            </span>
+                            <input
+                                name="originalPrincipal"
+                                type="number"
+                                placeholder="Enter dollar amount"
+                                style={{
+                                    border: originalPrincipalError
+                                        ? '2px solid #dc3545'
+                                        : '1px solid #ccc',
+                                    borderRadius: '4px',
+                                    padding: '8px 8px 8px 20px',
+                                    fontSize: '14px',
+                                }}
+                                required
+                            />
+                        </div>
                     </label>
                     {originalPrincipalError && (
                         <div
