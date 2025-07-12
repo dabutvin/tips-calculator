@@ -1,45 +1,159 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import CusipDetails from '../components/cusipDetails'
+import Notification from '../components/Notification'
 import styles from '../styles/CusipList.module.css'
+import {
+    loadCusipsFromStorage,
+    addCusipToStorage,
+    removeCusipFromStorage,
+    isLocalStorageAvailable,
+} from '../utils/localStorage'
 
 export default function CusipList() {
     const [cusips, setCusips] = useState([])
+    const [storageAvailable, setStorageAvailable] = useState(true)
+    const [loading, setLoading] = useState(true)
+    const [notification, setNotification] = useState(null)
+
+    // Show notification helper (only for errors)
+    const showNotification = (message, type = 'error') => {
+        if (type === 'error') {
+            setNotification({ message, type })
+            setTimeout(() => setNotification(null), 3000)
+        }
+    }
+
+    // Load saved CUSIPs on component mount
+    useEffect(() => {
+        const loadSavedCusips = async () => {
+            setLoading(true)
+
+            // Check if localStorage is available
+            const available = isLocalStorageAvailable()
+            setStorageAvailable(available)
+
+            if (!available) {
+                console.warn('localStorage is not available. Data will not persist.')
+                showNotification('localStorage is not available. Data will not persist.', 'error')
+                setLoading(false)
+                return
+            }
+
+            // Load data from localStorage
+            const result = loadCusipsFromStorage()
+            if (result.success) {
+                setCusips(result.data)
+            } else {
+                console.error('Failed to load CUSIPs from localStorage:', result.error)
+                showNotification('Failed to load saved data', 'error')
+            }
+
+            setLoading(false)
+        }
+
+        loadSavedCusips()
+    }, [])
 
     const handleNewCusip = (event) => {
-        setCusips([
-            ...cusips,
-            {
-                cusipId: event.target['cusipId'].value,
-                originalPrincipal: event.target['originalPrincipal'].value,
-            },
-        ])
-        event.target.reset()
         event.preventDefault()
+
+        const newCusip = {
+            cusipId: event.target['cusipId'].value,
+            originalPrincipal: event.target['originalPrincipal'].value,
+        }
+
+        // Update local state
+        const updatedCusips = [...cusips, newCusip]
+        setCusips(updatedCusips)
+
+        // Save to localStorage if available
+        if (storageAvailable) {
+            const result = addCusipToStorage(newCusip)
+            if (!result.success) {
+                console.error('Failed to save CUSIP to localStorage:', result.error)
+                showNotification('Failed to save CUSIP', 'error')
+            }
+        }
+
+        event.target.reset()
+    }
+
+    const handleRemoveCusip = (cusipId) => {
+        // Update local state
+        const updatedCusips = cusips.filter((cusip) => cusip.cusipId !== cusipId)
+        setCusips(updatedCusips)
+
+        // Remove from localStorage if available
+        if (storageAvailable) {
+            const result = removeCusipFromStorage(cusipId)
+            if (!result.success) {
+                console.error('Failed to remove CUSIP from localStorage:', result.error)
+                showNotification('Failed to remove CUSIP', 'error')
+            }
+        }
+    }
+
+    if (loading) {
+        return <div className={styles.cusipList}>Loading saved CUSIPs...</div>
     }
 
     return (
         <div className={styles.cusipList}>
+            <Notification notification={notification} />
+
+            {!storageAvailable && (
+                <div
+                    style={{
+                        backgroundColor: '#fff3cd',
+                        color: '#856404',
+                        padding: '10px',
+                        marginBottom: '10px',
+                        borderRadius: '4px',
+                        border: '1px solid #ffeaa7',
+                    }}
+                >
+                    ⚠️ localStorage is not available. Your data will not persist between sessions.
+                </div>
+            )}
+
             <form onSubmit={handleNewCusip}>
                 <div>
                     <label>
-                        CUSIP: <input name="cusipId" type="text" />
+                        CUSIP: <input name="cusipId" type="text" required />
                     </label>
                 </div>
                 <div>
                     <label>
-                        Original Principal: <input name="originalPrincipal" type="number" />
+                        Original Principal:{' '}
+                        <input name="originalPrincipal" type="number" required />
                     </label>
                 </div>
                 <button type="submit">Add</button>
             </form>
+
             {cusips.map(({ cusipId, originalPrincipal }, index) => (
-                <CusipDetails
-                    key={`${index}_${cusipId}`}
-                    cusip={cusipId}
-                    originalPrincipal={originalPrincipal}
-                />
+                <div key={`${index}_${cusipId}`} style={{ position: 'relative' }}>
+                    <CusipDetails cusip={cusipId} originalPrincipal={originalPrincipal} />
+                    <button
+                        onClick={() => handleRemoveCusip(cusipId)}
+                        style={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: '10px',
+                            background: '#dc3545',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            padding: '5px 10px',
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                        }}
+                    >
+                        Remove
+                    </button>
+                </div>
             ))}
         </div>
     )
