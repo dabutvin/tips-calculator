@@ -25,6 +25,22 @@ export default function Home() {
                 <h1 className={styles.title}>TIPS Calculator</h1>
                 <p className={styles.description}>Look up TIPS by CUSIP number</p>
 
+                <div style={{ marginBottom: '20px' }}>
+                    <a
+                        href="/resources"
+                        style={{
+                            color: '#0070f3',
+                            textDecoration: 'none',
+                            fontSize: '16px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px'
+                        }}
+                    >
+                        What are TIPS? →
+                    </a>
+                </div>
+
                 <div
                     style={{
                         display: 'flex',
