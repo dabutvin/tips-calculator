@@ -38,5 +38,9 @@ export const validateOriginalPrincipal = (value) => {
         return 'Original principal must be greater than zero'
     }
 
+    if (numValue % 100 !== 0) {
+        return 'Original principal must be divisible by 100'
+    }
+
     return ''
 }
