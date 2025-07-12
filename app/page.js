@@ -8,7 +8,7 @@ export default function Home() {
         <div className={styles.container}>
             <main className={styles.main}>
                 <h1 className={styles.title}>TIPS Calculator</h1>
-                <p className={styles.description}>Something something here</p>
+                <p className={styles.description}>Look up TIPS by CUSIP number</p>
                 <CusipList />
             </main>
 
