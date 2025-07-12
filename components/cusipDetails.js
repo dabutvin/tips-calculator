@@ -14,47 +14,90 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
     const [adjustedPrincipal, setAdjustedPrincipal] = useState(null)
     const [cpiChartData, setCpiChartData] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         const fetchData = async () => {
-            let cpiEntriesResponse = await getCpiEntries(cusip)
-            setCpiEntries(cpiEntriesResponse)
+            try {
+                setError(null)
+                setIsLoading(true)
+                
+                let cpiEntriesResponse = await getCpiEntries(cusip)
+                setCpiEntries(cpiEntriesResponse)
 
-            let securityDetailsResponse = await getSecurityDetails(cusip)
-            setSecurityDetails(securityDetailsResponse)
+                let securityDetailsResponse = await getSecurityDetails(cusip)
+                setSecurityDetails(securityDetailsResponse)
 
-            // find today's entry by matching the current date with the indexDate
-            let todaysEntry = cpiEntriesResponse.find(
-                (entry) => entry.indexDate == format(new Date(), 'YYYY-MM-DDT00:00:00'),
-            )
-            setCurrentCpiEntry(todaysEntry)
-            setAdjustedPrincipal((todaysEntry?.dailyIndex * originalPrincipal).toFixed(2))
+                // find today's entry by matching the current date with the indexDate
+                let todaysEntry = cpiEntriesResponse.find(
+                    (entry) => entry.indexDate == format(new Date(), 'YYYY-MM-DDT00:00:00'),
+                )
+                setCurrentCpiEntry(todaysEntry)
+                setAdjustedPrincipal((todaysEntry?.dailyIndex * originalPrincipal).toFixed(2))
 
-            setCpiChartData(
-                cpiEntriesResponse
-                    .map((entry) => {
-                        return {
-                            indexDate: new Date(entry.indexDate).toLocaleDateString(),
-                            dailyIndex: Number(entry.dailyIndex),
-                            dailyAdjustedPrincipal: Number(
-                                originalPrincipal * entry.dailyIndex,
-                            ).toFixed(2),
-                        }
-                    })
-                    .reverse(),
-            )
+                setCpiChartData(
+                    cpiEntriesResponse
+                        .map((entry) => {
+                            return {
+                                indexDate: new Date(entry.indexDate).toLocaleDateString(),
+                                dailyIndex: Number(entry.dailyIndex),
+                                dailyAdjustedPrincipal: Number(
+                                    originalPrincipal * entry.dailyIndex,
+                                ).toFixed(2),
+                            }
+                        })
+                        .reverse(),
+                )
+            } catch (err) {
+                setError(err.message)
+                setCpiEntries(null)
+                setSecurityDetails(null)
+                setCurrentCpiEntry(null)
+                setAdjustedPrincipal(null)
+                setCpiChartData(null)
+            } finally {
+                setIsLoading(false)
+            }
         }
+        
         if (cusip) {
             fetchData()
-                .catch(console.error)
-                .finally(() => {
-                    setIsLoading(false)
-                })
+        } else {
+            setIsLoading(false)
         }
-    }, [cusip])
+    }, [cusip, originalPrincipal])
 
     if (isLoading) {
         return <div>Loading ...</div>
+    }
+
+    if (error) {
+        return (
+            <div className={styles.cusipDetails}>
+                <div style={{ 
+                    color: '#dc3545', 
+                    backgroundColor: '#f8d7da', 
+                    border: '1px solid #f5c6cb',
+                    borderRadius: '4px',
+                    padding: '10px',
+                    marginBottom: '10px'
+                }}>
+                    <strong>Error:</strong> {error}
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>CUSIP:</td>
+                            <td>{cusip}</td>
+                        </tr>
+                        <tr>
+                            <td>Original Principal:</td>
+                            <td>${originalPrincipal}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        )
     }
 
     return (
