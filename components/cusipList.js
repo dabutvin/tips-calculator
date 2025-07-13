@@ -19,6 +19,8 @@ export default function CusipList() {
     const [notification, setNotification] = useState(null)
     const [cusipError, setCusipError] = useState('')
     const [originalPrincipalError, setOriginalPrincipalError] = useState('')
+    const [allCollapsed, setAllCollapsed] = useState(true)
+    const [collapsedStates, setCollapsedStates] = useState({})
 
     // Show notification helper (only for errors)
     const showNotification = (message, type = 'error') => {
@@ -48,6 +50,12 @@ export default function CusipList() {
             const result = loadCusipsFromStorage()
             if (result.success) {
                 setCusips(result.data)
+                // Initialize collapsed states
+                const initialCollapsedStates = {}
+                result.data.forEach(cusip => {
+                    initialCollapsedStates[cusip.cusipId] = true
+                })
+                setCollapsedStates(initialCollapsedStates)
             } else {
                 console.error('Failed to load CUSIPs from localStorage:', result.error)
                 showNotification('Failed to load saved data', 'error')
@@ -88,6 +96,12 @@ export default function CusipList() {
         const updatedCusips = [...cusips, newCusip]
         setCusips(updatedCusips)
 
+        // Initialize collapsed state for new CUSIP
+        setCollapsedStates(prev => ({
+            ...prev,
+            [cusipId]: allCollapsed
+        }))
+
         // Save to localStorage if available
         if (storageAvailable) {
             const result = addCusipToStorage(newCusip)
@@ -114,6 +128,13 @@ export default function CusipList() {
         const updatedCusips = cusips.filter((cusip) => cusip.cusipId !== cusipId)
         setCusips(updatedCusips)
 
+        // Remove collapsed state
+        setCollapsedStates(prev => {
+            const newStates = { ...prev }
+            delete newStates[cusipId]
+            return newStates
+        })
+
         // Remove from localStorage if available
         if (storageAvailable) {
             const result = removeCusipFromStorage(cusipId)
@@ -122,6 +143,25 @@ export default function CusipList() {
                 showNotification('Failed to remove CUSIP', 'error')
             }
         }
+    }
+
+    const toggleAllCollapsed = () => {
+        const newCollapsedState = !allCollapsed
+        setAllCollapsed(newCollapsedState)
+        
+        // Update all individual collapsed states
+        const newCollapsedStates = {}
+        cusips.forEach(cusip => {
+            newCollapsedStates[cusip.cusipId] = newCollapsedState
+        })
+        setCollapsedStates(newCollapsedStates)
+    }
+
+    const toggleIndividualCollapsed = (cusipId) => {
+        setCollapsedStates(prev => ({
+            ...prev,
+            [cusipId]: !prev[cusipId]
+        }))
     }
 
     if (loading) {
@@ -185,15 +225,27 @@ export default function CusipList() {
                 </form>
             </div>
 
+            {cusips.length > 0 && (
+                <div className={styles.cardsHeader}>
+                    <button
+                        onClick={toggleAllCollapsed}
+                        className={styles.toggleAllBtn}
+                    >
+                        {allCollapsed ? 'Expand All' : 'Collapse All'}
+                    </button>
+                </div>
+            )}
+
             {cusips.map(({ cusipId, originalPrincipal }, index) => (
                 <div key={`${index}_${cusipId}`} className={styles['cusip-card']}>
-                    <CusipDetails cusip={cusipId} originalPrincipal={originalPrincipal} />
-                    <button
-                        onClick={() => handleRemoveCusip(cusipId)}
-                        className={styles['remove-btn']}
-                    >
-                        X
-                    </button>
+                    <CusipDetails 
+                        cusip={cusipId} 
+                        originalPrincipal={originalPrincipal} 
+                        collapsed={collapsedStates[cusipId] ?? allCollapsed}
+                        onToggle={() => toggleIndividualCollapsed(cusipId)}
+                        isCollapsed={collapsedStates[cusipId] ?? allCollapsed}
+                        onRemove={() => handleRemoveCusip(cusipId)}
+                    />
                 </div>
             ))}
         </div>

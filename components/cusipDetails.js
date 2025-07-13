@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { getCpiEntries, getSecurityDetails } from '../actions/treasuryApi'
 import styles from '../styles/CusipDetails.module.css'
 
-export default function CusipDetails({ cusip, originalPrincipal }) {
+export default function CusipDetails({ cusip, originalPrincipal, collapsed = false, onToggle, isCollapsed, onRemove }) {
     const [cpiEntries, setCpiEntries] = useState(null)
     const [securityDetails, setSecurityDetails] = useState(null)
     const [currentCpiEntry, setCurrentCpiEntry] = useState(null)
@@ -103,8 +103,65 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
         )
     }
 
+    // Collapsed view - show only essential fields horizontally
+    if (collapsed) {
+        return (
+            <div className={styles.cusipDetails}>
+                <div className={styles.collapsedView}>
+                    <div className={styles.collapsedContent}>
+                        <button
+                            onClick={onToggle}
+                            className={styles.collapsedToggleBtn}
+                        >
+                            {isCollapsed ? '▶' : '▼'}
+                        </button>
+                        <div className={styles.collapsedField}>
+                            <span className={styles.collapsedLabel}>CUSIP:</span>
+                            <span className={styles.collapsedValue}>{cusip}</span>
+                        </div>
+                        <div className={styles.collapsedField}>
+                            <span className={styles.collapsedLabel}>Maturity:</span>
+                            <span className={styles.collapsedValue}>
+                                {securityDetails?.maturityDate ? new Date(securityDetails.maturityDate).toLocaleDateString() : 'N/A'}
+                            </span>
+                        </div>
+                        <div className={styles.collapsedField}>
+                            <span className={styles.collapsedLabel}>Original:</span>
+                            <span className={styles.collapsedValue}>${originalPrincipal}</span>
+                        </div>
+                        <div className={styles.collapsedField}>
+                            <span className={styles.collapsedLabel}>Current:</span>
+                            <span className={styles.collapsedValue}>${Number(adjustedPrincipal).toFixed(0)}</span>
+                        </div>
+                    </div>
+                    <button
+                        onClick={onRemove}
+                        className={styles.collapsedRemoveBtn}
+                    >
+                        X
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
+    // Full expanded view
     return (
         <div className={styles.cusipDetails}>
+            <div className={styles.expandedHeader}>
+                <button
+                    onClick={onToggle}
+                    className={styles.expandedToggleBtn}
+                >
+                    {isCollapsed ? '▶' : '▼'}
+                </button>
+                <button
+                    onClick={onRemove}
+                    className={styles.expandedRemoveBtn}
+                >
+                    X
+                </button>
+            </div>
             <table>
                 <tbody>
                     <tr>

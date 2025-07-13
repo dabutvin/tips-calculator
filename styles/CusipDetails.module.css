@@ -1,6 +1,123 @@
 .cusipDetails {
-    margin: 10px 0;
-    padding: 10px;
+    padding: 10px 20px;
+}
+
+.cusipDetails table td:nth-child(2) {
+    font-weight: 600;
+}
+
+.collapsedView {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: space-between;
+}
+
+.collapsedContent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    flex: 1;
+}
+
+.collapsedField {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 100px;
+    flex-shrink: 0;
+}
+
+.collapsedLabel {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
+}
+
+.collapsedValue {
+    font-size: 0.9rem;
+    color: #222;
+    font-weight: 600;
+}
+
+.collapsedToggleBtn {
+    background: transparent;
+    color: #0070f3;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-weight: bold;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+}
+
+.collapsedToggleBtn:hover {
+    color: #0056b3;
+}
+
+.expandedHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.expandedToggleBtn {
+    background: transparent;
+    color: #0070f3;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-weight: bold;
+}
+
+.expandedToggleBtn:hover {
+    color: #0056b3;
+}
+
+.collapsedRemoveBtn {
+    background: transparent;
+    color: #222;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.collapsedRemoveBtn:hover {
+    color: #dc3545;
+}
+
+.expandedRemoveBtn {
+    background: transparent;
+    color: #222;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.expandedRemoveBtn:hover {
+    color: #dc3545;
 }
 
 .cpiEntries {
@@ -54,4 +171,17 @@
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     margin: 20px 0;
+}
+
+@media (max-width: 600px) {
+    .collapsedView {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .collapsedField {
+        min-width: auto;
+        width: 100%;
+    }
 }
