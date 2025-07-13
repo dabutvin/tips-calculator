@@ -5,6 +5,7 @@ import CusipDetails from '../components/cusipDetails'
 import CusipForm from '../components/CusipForm'
 import Notification from '../components/Notification'
 import SortControl from '../components/SortControl'
+import ConfirmationDialog from '../components/ConfirmationDialog'
 import styles from '../styles/CusipList.module.css'
 import { useCusipSorting } from '../hooks/useCusipSorting'
 import { useCusipStorage } from '../hooks/useCusipStorage'
@@ -37,6 +38,7 @@ export default function CusipList() {
     } = useCollapseState()
     
     const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
+    const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed
 
     // Use the custom sorting hook
     const { sortedCusips, sortBy, sortDirection, handleSortChange } = useCusipSorting(cusips, cusipData)
@@ -86,12 +88,27 @@ export default function CusipList() {
             delete newData[cusipId]
             return newData
         })
+
+        // Clear the confirmation dialog
+        setCusipToRemove(null)
+        showNotification('CUSIP removed successfully', 'success')
     }, [removeCusip, removeCollapsedState, showNotification])
 
-    // Create stable callback for remove
+    // Handle confirmation dialog
+    const handleConfirmRemove = useCallback(() => {
+        if (cusipToRemove) {
+            handleRemoveCusip(cusipToRemove)
+        }
+    }, [cusipToRemove, handleRemoveCusip])
+
+    const handleCancelRemove = useCallback(() => {
+        setCusipToRemove(null)
+    }, [])
+
+    // Create stable callback for remove - now shows confirmation dialog
     const createRemoveCallback = useCallback((cusipId) => {
-        return () => handleRemoveCusip(cusipId)
-    }, [handleRemoveCusip])
+        return () => setCusipToRemove(cusipId)
+    }, [])
 
     if (loading) {
         return <div className={styles.cusipList}>Loading saved CUSIPs...</div>
@@ -135,6 +152,15 @@ export default function CusipList() {
                     />
                 </div>
             ))}
+
+            <ConfirmationDialog 
+                isOpen={!!cusipToRemove}
+                message={`Are you sure you want to remove CUSIP ${cusipToRemove} from your list?`}
+                confirmText="Remove"
+                cancelText="Cancel"
+                onConfirm={handleConfirmRemove}
+                onCancel={handleCancelRemove}
+            />
         </div>
     )
 }

@@ -4,10 +4,12 @@ import { useState } from 'react'
 import styles from '../styles/Home.module.css'
 import CusipList from '../components/cusipList'
 import Tooltip from '../components/Tooltip'
+import ConfirmationDialog from '../components/ConfirmationDialog'
 import { clearLocalStorage } from '../utils/localStorage'
 
 export default function Home() {
     const [key, setKey] = useState(0) // Force re-render when data is cleared
+    const [showClearConfirmation, setShowClearConfirmation] = useState(false)
 
     const handleClearAllData = () => {
         const result = clearLocalStorage()
@@ -17,6 +19,15 @@ export default function Home() {
         } else {
             console.error('Failed to clear localStorage:', result.error)
         }
+        setShowClearConfirmation(false)
+    }
+
+    const handleClearAllDataClick = () => {
+        setShowClearConfirmation(true)
+    }
+
+    const handleCancelClear = () => {
+        setShowClearConfirmation(false)
     }
 
     return (
@@ -45,7 +56,7 @@ export default function Home() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
                     <button
-                        onClick={handleClearAllData}
+                        onClick={handleClearAllDataClick}
                         style={{
                             backgroundColor: '#fff',
                             color: '#dc3545',
@@ -73,6 +84,15 @@ export default function Home() {
                 </div>
 
                 <CusipList key={key} />
+
+                <ConfirmationDialog 
+                    isOpen={showClearConfirmation}
+                    message="Are you sure you want to clear all saved CUSIP data?"
+                    confirmText="Clear All"
+                    cancelText="Cancel"
+                    onConfirm={handleClearAllData}
+                    onCancel={handleCancelClear}
+                />
             </main>
 
             <footer className={styles.footer}>
