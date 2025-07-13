@@ -80,7 +80,7 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
     }, [cusip, originalPrincipal, onDataUpdate])
 
     if (isLoading) {
-        return <div>Loading ...</div>
+        return <div style={{ padding: '20px' }}>Loading ...</div>
     }
 
     if (error) {
