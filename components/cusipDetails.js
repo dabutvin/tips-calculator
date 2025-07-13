@@ -137,7 +137,7 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
                     </tr>
                     <tr>
                         <td>Interest Rate:</td>
-                        <td>{Number(securityDetails?.interestRate).toFixed(2)}%</td>
+                        <td>{Number(securityDetails?.interestRate).toFixed(3)}%</td>
                     </tr>
                 </tbody>
             </table>
