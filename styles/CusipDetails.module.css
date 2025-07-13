@@ -47,3 +47,11 @@
 .fadeOut {
     opacity: 0.3;
 }
+
+.chartContainer {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+}

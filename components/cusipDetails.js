@@ -143,38 +143,40 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
             </table>
 
             {cpiEntries && (
-                <LineChart
-                    width={600}
-                    height={300}
-                    data={cpiChartData}
-                    margin={{ top: 20, right: 10, bottom: 10, left: 10 }}
-                >
-                    <Line type="monotone" dataKey="dailyAdjustedPrincipal" stroke="#8884d8" />
-                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                    <XAxis
-                        dataKey="indexDate"
-                        interval={Math.floor(cpiChartData.length / 6)}
-                        tickFormatter={(value) => {
-                            const date = new Date(value)
-                            const month = (date.getMonth() + 1).toString()
-                            const year = date.getFullYear().toString().slice(-2)
-                            return `${month}/${year}`
-                        }}
-                    />
-                    <YAxis type="number" tickFormatter={(value) => `$${value}`} />
-                    <Tooltip formatter={(value) => [`$${value}`, 'Daily Adjusted Principal']} />
-                    <ReferenceLine
-                        x={new Date().toLocaleDateString()}
-                        stroke="#ff6b6b"
-                        strokeDasharray="3 3"
-                        label={{
-                            value: `$${Math.round(adjustedPrincipal)}`,
-                            position: 'left',
-                            offset: 1,
-                            style: { transform: 'translateY(-30px)' }
-                        }}
-                    />
-                </LineChart>
+                <div className={styles.chartContainer}>
+                    <LineChart
+                        width={600}
+                        height={300}
+                        data={cpiChartData}
+                        margin={{ top: 20, right: 10, bottom: 10, left: 10 }}
+                    >
+                        <Line type="monotone" dataKey="dailyAdjustedPrincipal" stroke="#8884d8" />
+                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                        <XAxis
+                            dataKey="indexDate"
+                            interval={Math.floor(cpiChartData.length / 6)}
+                            tickFormatter={(value) => {
+                                const date = new Date(value)
+                                const month = (date.getMonth() + 1).toString()
+                                const year = date.getFullYear().toString().slice(-2)
+                                return `${month}/${year}`
+                            }}
+                        />
+                        <YAxis type="number" tickFormatter={(value) => `$${value}`} />
+                        <Tooltip formatter={(value) => [`$${value}`, 'Daily Adjusted Principal']} />
+                        <ReferenceLine
+                            x={new Date().toLocaleDateString()}
+                            stroke="#ff6b6b"
+                            strokeDasharray="3 3"
+                            label={{
+                                value: `$${Math.round(adjustedPrincipal)}`,
+                                position: 'left',
+                                offset: 1,
+                                style: { transform: 'translateY(-30px)' }
+                            }}
+                        />
+                    </LineChart>
+                </div>
             )}
 
             {cpiEntries && (
