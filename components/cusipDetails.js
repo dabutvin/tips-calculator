@@ -1,7 +1,7 @@
 'use client'
 
 import { format } from 'fecha'
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceLine } from 'recharts'
 
 import { useEffect, useState } from 'react'
 import { getCpiEntries, getSecurityDetails } from '../actions/treasuryApi'
@@ -163,6 +163,17 @@ export default function CusipDetails({ cusip, originalPrincipal }) {
                     />
                     <YAxis type="number" tickFormatter={(value) => `$${value}`} />
                     <Tooltip formatter={(value) => [`$${value}`, 'Daily Adjusted Principal']} />
+                    <ReferenceLine
+                        x={new Date().toLocaleDateString()}
+                        stroke="#ff6b6b"
+                        strokeDasharray="3 3"
+                        label={{
+                            value: `$${Math.round(adjustedPrincipal)}`,
+                            position: 'left',
+                            offset: 1,
+                            style: { transform: 'translateY(-30px)' }
+                        }}
+                    />
                 </LineChart>
             )}
 
