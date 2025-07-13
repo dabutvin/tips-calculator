@@ -25,6 +25,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 1rem;
     margin-bottom: 0.5rem;
 }
 
@@ -38,11 +40,47 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
+    min-width: 120px;
+    white-space: nowrap;
+    height: 36px;
+    box-sizing: border-box;
 }
 
 .toggleAllBtn:hover {
     background: #e9ecef;
     border-color: #0070f3;
+}
+
+.sortControls {
+    display: flex;
+    align-items: center;
+}
+
+.sortSelect {
+    background: #f8f9fa;
+    color: #222;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+    min-width: 200px;
+    height: 36px;
+    box-sizing: border-box;
+}
+
+.sortSelect:hover {
+    background: #e9ecef;
+    border-color: #0070f3;
+}
+
+.sortSelect:focus {
+    border-color: #0070f3;
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.1);
 }
 
 .cusipList form {
@@ -215,5 +253,13 @@
     }
     .confirmationButtons {
         flex-direction: column;
+    }
+    .cardsHeader {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .sortSelect {
+        min-width: 180px;
+        font-size: 0.85rem;
     }
 }
