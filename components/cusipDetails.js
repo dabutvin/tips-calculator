@@ -137,6 +137,10 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
                             </span>
                         </div>
                         <div className={styles.collapsedField}>
+                            <span className={styles.collapsedLabel}>Rate:</span>
+                            <span className={styles.collapsedValue}>{Number(securityDetails?.interestRate).toFixed(3)}%</span>
+                        </div>
+                        <div className={styles.collapsedField}>
                             <span className={styles.collapsedLabel}>Original:</span>
                             <span className={styles.collapsedValue}>${originalPrincipal}</span>
                         </div>
