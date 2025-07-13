@@ -1,9 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, memo } from 'react'
 import CusipDetails from '../components/cusipDetails'
 import Notification from '../components/Notification'
+import SortControl from '../components/SortControl'
 import styles from '../styles/CusipList.module.css'
+import { useCusipSorting } from '../hooks/useCusipSorting'
 import {
     loadCusipsFromStorage,
     addCusipToStorage,
@@ -11,6 +13,9 @@ import {
     isLocalStorageAvailable,
 } from '../utils/localStorage'
 import { validateCusip, validateOriginalPrincipal } from '../utils/validation'
+
+// Memoized CusipDetails wrapper to prevent unnecessary re-renders
+const MemoizedCusipDetails = memo(CusipDetails)
 
 export default function CusipList() {
     const [cusips, setCusips] = useState([])
@@ -21,6 +26,10 @@ export default function CusipList() {
     const [originalPrincipalError, setOriginalPrincipalError] = useState('')
     const [allCollapsed, setAllCollapsed] = useState(true)
     const [collapsedStates, setCollapsedStates] = useState({})
+    const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
+
+    // Use the custom sorting hook
+    const { sortedCusips, sortBy, sortDirection, handleSortChange } = useCusipSorting(cusips, cusipData)
 
     // Show notification helper (only for errors)
     const showNotification = (message, type = 'error') => {
@@ -65,6 +74,14 @@ export default function CusipList() {
         }
 
         loadSavedCusips()
+    }, [])
+
+    // Function to handle data updates from CusipDetails components - memoized to prevent infinite loops
+    const handleCusipDataUpdate = useCallback((data) => {
+        setCusipData(prev => ({
+            ...prev,
+            [data.cusipId]: data
+        }))
     }, [])
 
     const handleNewCusip = (event) => {
@@ -123,16 +140,22 @@ export default function CusipList() {
         }
     }
 
-    const handleRemoveCusip = (cusipId) => {
+    const handleRemoveCusip = useCallback((cusipId) => {
         // Update local state
-        const updatedCusips = cusips.filter((cusip) => cusip.cusipId !== cusipId)
-        setCusips(updatedCusips)
+        setCusips(prev => prev.filter((cusip) => cusip.cusipId !== cusipId))
 
         // Remove collapsed state
         setCollapsedStates(prev => {
             const newStates = { ...prev }
             delete newStates[cusipId]
             return newStates
+        })
+
+        // Remove cached data for this CUSIP
+        setCusipData(prev => {
+            const newData = { ...prev }
+            delete newData[cusipId]
+            return newData
         })
 
         // Remove from localStorage if available
@@ -143,26 +166,37 @@ export default function CusipList() {
                 showNotification('Failed to remove CUSIP', 'error')
             }
         }
-    }
+    }, [storageAvailable])
 
-    const toggleAllCollapsed = () => {
+    const toggleAllCollapsed = useCallback(() => {
         const newCollapsedState = !allCollapsed
         setAllCollapsed(newCollapsedState)
         
         // Update all individual collapsed states
-        const newCollapsedStates = {}
-        cusips.forEach(cusip => {
-            newCollapsedStates[cusip.cusipId] = newCollapsedState
+        setCollapsedStates(prev => {
+            const newCollapsedStates = {}
+            cusips.forEach(cusip => {
+                newCollapsedStates[cusip.cusipId] = newCollapsedState
+            })
+            return newCollapsedStates
         })
-        setCollapsedStates(newCollapsedStates)
-    }
+    }, [allCollapsed, cusips])
 
-    const toggleIndividualCollapsed = (cusipId) => {
+    const toggleIndividualCollapsed = useCallback((cusipId) => {
         setCollapsedStates(prev => ({
             ...prev,
             [cusipId]: !prev[cusipId]
         }))
-    }
+    }, [])
+
+    // Create stable callbacks for each CUSIP to prevent re-renders
+    const createToggleCallback = useCallback((cusipId) => {
+        return () => toggleIndividualCollapsed(cusipId)
+    }, [toggleIndividualCollapsed])
+
+    const createRemoveCallback = useCallback((cusipId) => {
+        return () => handleRemoveCusip(cusipId)
+    }, [handleRemoveCusip])
 
     if (loading) {
         return <div className={styles.cusipList}>Loading saved CUSIPs...</div>
@@ -233,18 +267,24 @@ export default function CusipList() {
                     >
                         {allCollapsed ? 'Expand All' : 'Collapse All'}
                     </button>
+                    <SortControl 
+                        sortBy={sortBy}
+                        sortDirection={sortDirection}
+                        onSortChange={handleSortChange}
+                    />
                 </div>
             )}
 
-            {cusips.map(({ cusipId, originalPrincipal }, index) => (
-                <div key={`${index}_${cusipId}`} className={styles['cusip-card']}>
-                    <CusipDetails 
+            {sortedCusips.map(({ cusipId, originalPrincipal }, index) => (
+                <div key={cusipId} className={styles['cusip-card']}>
+                    <MemoizedCusipDetails 
                         cusip={cusipId} 
                         originalPrincipal={originalPrincipal} 
                         collapsed={collapsedStates[cusipId] ?? allCollapsed}
-                        onToggle={() => toggleIndividualCollapsed(cusipId)}
+                        onToggle={createToggleCallback(cusipId)}
                         isCollapsed={collapsedStates[cusipId] ?? allCollapsed}
-                        onRemove={() => handleRemoveCusip(cusipId)}
+                        onRemove={createRemoveCallback(cusipId)}
+                        onDataUpdate={handleCusipDataUpdate}
                     />
                 </div>
             ))}

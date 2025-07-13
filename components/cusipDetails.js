@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { getCpiEntries, getSecurityDetails } from '../actions/treasuryApi'
 import styles from '../styles/CusipDetails.module.css'
 
-export default function CusipDetails({ cusip, originalPrincipal, collapsed = false, onToggle, isCollapsed, onRemove }) {
+export default function CusipDetails({ cusip, originalPrincipal, collapsed = false, onToggle, isCollapsed, onRemove, onDataUpdate }) {
     const [cpiEntries, setCpiEntries] = useState(null)
     const [securityDetails, setSecurityDetails] = useState(null)
     const [currentCpiEntry, setCurrentCpiEntry] = useState(null)
@@ -34,7 +34,18 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
                     (entry) => entry.indexDate == format(new Date(), 'YYYY-MM-DDT00:00:00'),
                 )
                 setCurrentCpiEntry(todaysEntry)
-                setAdjustedPrincipal((todaysEntry?.dailyIndex * originalPrincipal).toFixed(2))
+                const adjustedPrincipalValue = (todaysEntry?.dailyIndex * originalPrincipal).toFixed(2)
+                setAdjustedPrincipal(adjustedPrincipalValue)
+
+                // Notify parent component of the data for sorting
+                if (onDataUpdate) {
+                    onDataUpdate({
+                        cusipId: cusip,
+                        maturityDate: securityDetailsResponse?.maturityDate,
+                        adjustedPrincipal: parseFloat(adjustedPrincipalValue),
+                        originalPrincipal: parseFloat(originalPrincipal)
+                    })
+                }
 
                 setCpiChartData(
                     cpiEntriesResponse
@@ -66,7 +77,7 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
         } else {
             setIsLoading(false)
         }
-    }, [cusip, originalPrincipal])
+    }, [cusip, originalPrincipal, onDataUpdate])
 
     if (isLoading) {
         return <div>Loading ...</div>

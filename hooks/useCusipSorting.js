@@ -1,0 +1,49 @@
+import { useState, useMemo } from 'react'
+
+export function useCusipSorting(cusips, cusipData) {
+    const [sortBy, setSortBy] = useState('entry') // 'entry', 'maturity', 'adjusted'
+    const [sortDirection, setSortDirection] = useState('asc') // 'asc', 'desc'
+
+    const sortedCusips = useMemo(() => {
+        if (sortBy === 'entry') {
+            return cusips // Return in entry order
+        }
+
+        return cusips.sort((a, b) => {
+            const aData = cusipData[a.cusipId]
+            const bData = cusipData[b.cusipId]
+
+            let aValue, bValue
+
+            if (sortBy === 'maturity') {
+                aValue = aData?.maturityDate ? new Date(aData.maturityDate) : null
+                bValue = bData?.maturityDate ? new Date(bData.maturityDate) : null
+                // Handle null values
+                if (!aValue && !bValue) return 0
+                if (!aValue) return sortDirection === 'asc' ? 1 : -1
+                if (!bValue) return sortDirection === 'asc' ? -1 : 1
+            } else if (sortBy === 'adjusted') {
+                aValue = aData?.adjustedPrincipal || a.originalPrincipal
+                bValue = bData?.adjustedPrincipal || b.originalPrincipal
+            }
+
+            if (sortDirection === 'asc') {
+                return aValue > bValue ? 1 : aValue < bValue ? -1 : 0
+            } else {
+                return aValue < bValue ? 1 : aValue > bValue ? -1 : 0
+            }
+        })
+    }, [cusips, cusipData, sortBy, sortDirection])
+
+    const handleSortChange = (newSortBy, newSortDirection) => {
+        setSortBy(newSortBy)
+        setSortDirection(newSortDirection)
+    }
+
+    return {
+        sortedCusips,
+        sortBy,
+        sortDirection,
+        handleSortChange
+    }
+} 
