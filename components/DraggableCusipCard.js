@@ -11,7 +11,8 @@ export default function DraggableCusipCard({
     onDragStart, 
     onDragEnd, 
     onDragOver, 
-    onDrop 
+    onDrop,
+    highlight = false
 }) {
     const [isDragOver, setIsDragOver] = useState(false)
     const cardRef = useRef(null)
@@ -56,7 +57,7 @@ export default function DraggableCusipCard({
             ref={cardRef}
             className={`${styles['cusip-card']} ${isDraggable ? styles.draggable : ''} ${
                 isDragging ? styles.dragging : ''
-            } ${isDragOver ? styles.dragOver : ''}`}
+            } ${isDragOver ? styles.dragOver : ''} ${highlight ? styles.highlight : ''}`}
             draggable={isDraggable}
             onDragStart={isDraggable ? handleDragStart : undefined}
             onDragEnd={isDraggable ? handleDragEnd : undefined}

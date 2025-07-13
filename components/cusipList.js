@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, memo } from 'react'
+import React, { useState, useEffect, useCallback, memo, useRef } from 'react'
 import CusipDetails from '../components/cusipDetails'
 import CusipForm from '../components/CusipForm'
 import Notification from '../components/Notification'
@@ -42,6 +42,8 @@ export default function CusipList() {
     
     const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
     const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed
+    const [highlightedCusip, setHighlightedCusip] = useState(null) // Track CUSIP to highlight
+    const shouldHighlightNext = useRef(false) // Flag to enable highlighting for next CUSIP
 
     // Use the custom sorting hook with reorder callback
     const { sortedCusips, sortBy, sortDirection, handleSortChange, handleReorder } = useCusipSorting(
@@ -69,10 +71,22 @@ export default function CusipList() {
 
     // Function to handle data updates from CusipDetails components - memoized to prevent infinite loops
     const handleCusipDataUpdate = useCallback((data) => {
-        setCusipData(prev => ({
-            ...prev,
-            [data.cusipId]: data
-        }))
+        setCusipData(prev => {
+            const newData = {
+                ...prev,
+                [data.cusipId]: data
+            }
+            
+            // Only highlight if the flag is set and this is a new CUSIP
+            if (shouldHighlightNext.current && !prev[data.cusipId]) {
+                setHighlightedCusip(data.cusipId)
+                setTimeout(() => {
+                    setHighlightedCusip(null)
+                }, 1000)
+            }
+            
+            return newData
+        })
     }, [])
 
     const handleNewCusip = (newCusip) => {
@@ -84,6 +98,10 @@ export default function CusipList() {
 
         // Add collapsed state for new CUSIP
         addCollapsedState(newCusip.cusipId)
+        
+        // Enable highlighting for the next CUSIP that loads data
+        shouldHighlightNext.current = true
+        
         return true
     }
 
@@ -165,6 +183,7 @@ export default function CusipList() {
                     onDragEnd={handleDragEnd}
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
+                    highlight={highlightedCusip === cusipId}
                 >
                     <MemoizedCusipDetails 
                         cusip={cusipId} 
