@@ -14,7 +14,7 @@ export default function Resources() {
 
                 <div style={{ maxWidth: '800px', textAlign: 'left', lineHeight: '1.6' }}>
                     <section style={{ marginBottom: '40px' }}>
-                        <h2 style={{ color: '#0070f3', marginBottom: '20px' }}>What are TIPS?</h2>
+                        <h2 style={{ color: '#222', marginBottom: '20px' }}>What are TIPS?</h2>
                         <p style={{ marginBottom: '15px' }}>
                             Treasury Inflation-Protected Securities (TIPS) are U.S. government bonds
                             designed to help protect investors from inflation. Unlike traditional
@@ -34,7 +34,7 @@ export default function Resources() {
                     </section>
 
                     <section style={{ marginBottom: '40px' }}>
-                        <h2 style={{ color: '#0070f3', marginBottom: '20px' }}>
+                        <h2 style={{ color: '#222', marginBottom: '20px' }}>
                             Sample TIPS CUSIPs
                         </h2>
                         <p style={{ marginBottom: '15px' }}>
@@ -104,7 +104,7 @@ export default function Resources() {
                     </section>
 
                     <section style={{ marginBottom: '40px' }}>
-                        <h2 style={{ color: '#0070f3', marginBottom: '20px' }}>
+                        <h2 style={{ color: '#222', marginBottom: '20px' }}>
                             Helpful Resources
                         </h2>
 
@@ -122,7 +122,7 @@ export default function Resources() {
                                         href="https://treasurydirect.gov/marketable-securities/tips/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{ color: '#0070f3', textDecoration: 'none' }}
+                                        style={{ color: '#3a5ca8', textDecoration: 'none' }}
                                     >
                                         TreasuryDirect TIPS
                                     </a>
@@ -146,7 +146,7 @@ export default function Resources() {
                                         href="https://www.bogleheads.org/wiki/Treasury_Inflation_Protected_Security"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{ color: '#0070f3', textDecoration: 'none' }}
+                                        style={{ color: '#3a5ca8', textDecoration: 'none' }}
                                     >
                                         Bogleheads TIPS Wiki
                                     </a>
@@ -170,7 +170,7 @@ export default function Resources() {
                                         href="https://eyebonds.info"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{ color: '#0070f3', textDecoration: 'none' }}
+                                        style={{ color: '#3a5ca8', textDecoration: 'none' }}
                                     >
                                         EyeBonds.info
                                     </a>
@@ -194,7 +194,7 @@ export default function Resources() {
                                         href="https://eyebonds.info/tips/help.html"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{ color: '#0070f3', textDecoration: 'none' }}
+                                        style={{ color: '#3a5ca8', textDecoration: 'none' }}
                                     >
                                         EyeBonds TIPS Help
                                     </a>
@@ -218,7 +218,7 @@ export default function Resources() {
                                         href="https://www.tipsladder.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{ color: '#0070f3', textDecoration: 'none' }}
+                                        style={{ color: '#3a5ca8', textDecoration: 'none' }}
                                     >
                                         TIPS Ladder
                                     </a>
@@ -241,7 +241,7 @@ export default function Resources() {
                                         href="https://tipswatch.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{ color: '#0070f3', textDecoration: 'none' }}
+                                        style={{ color: '#3a5ca8', textDecoration: 'none' }}
                                     >
                                         TIPS Watch
                                     </a>
@@ -259,7 +259,7 @@ export default function Resources() {
                     <Link
                         href="/"
                         style={{
-                            color: '#0070f3',
+                            color: '#3a5ca8',
                             textDecoration: 'none',
                             fontSize: '16px',
                             display: 'inline-flex',

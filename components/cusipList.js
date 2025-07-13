@@ -141,105 +141,67 @@ export default function CusipList() {
                 </div>
             )}
 
-            <form onSubmit={handleNewCusip}>
-                <div>
-                    <label>
-                        CUSIP:{' '}
-                        <input
-                            name="cusipId"
-                            type="text"
-                            maxLength={9}
-                            placeholder="Enter 9-character CUSIP"
-                            style={{
-                                border: cusipError ? '2px solid #dc3545' : '1px solid #ccc',
-                                borderRadius: '4px',
-                                padding: '8px',
-                                fontSize: '14px',
-                            }}
-                            required
-                        />
-                    </label>
-                    {cusipError && (
-                        <div
-                            style={{
-                                color: '#dc3545',
-                                fontSize: '12px',
-                                marginTop: '4px',
-                                marginBottom: '8px',
-                            }}
-                        >
-                            {cusipError}
-                        </div>
-                    )}
-                </div>
-                <div>
-                    <label>
-                        Original Principal:{' '}
-                        <div style={{ position: 'relative', display: 'inline-block' }}>
-                            <span
-                                style={{
-                                    position: 'absolute',
-                                    left: '8px',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    color: '#666',
-                                    fontSize: '14px',
-                                    zIndex: 1,
-                                }}
-                            >
-                                $
-                            </span>
+            <div className={styles['form-card']}>
+                <form className={styles.form} onSubmit={handleNewCusip} autoComplete="off">
+                    <div>
+                        <label>
+                            CUSIP:
                             <input
-                                name="originalPrincipal"
-                                type="number"
-                                placeholder="Enter dollar amount"
-                                style={{
-                                    border: originalPrincipalError
-                                        ? '2px solid #dc3545'
-                                        : '1px solid #ccc',
-                                    borderRadius: '4px',
-                                    padding: '8px 8px 8px 20px',
-                                    fontSize: '14px',
-                                }}
+                                name="cusipId"
+                                type="text"
+                                maxLength={9}
+                                placeholder="Enter 9-character CUSIP"
+                                className={styles.input}
                                 required
                             />
-                        </div>
-                    </label>
-                    {originalPrincipalError && (
-                        <div
-                            style={{
-                                color: '#dc3545',
-                                fontSize: '12px',
-                                marginTop: '4px',
-                                marginBottom: '8px',
-                            }}
-                        >
-                            {originalPrincipalError}
-                        </div>
-                    )}
-                </div>
-                <button type="submit">Add</button>
-            </form>
+                        </label>
+                        {cusipError && (
+                            <div className={styles.error}>{cusipError}</div>
+                        )}
+                    </div>
+                    <div>
+                        <label>
+                            Original Principal:
+                            <div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+                                <span
+                                    style={{
+                                        position: 'absolute',
+                                        left: '14px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        color: '#666',
+                                        fontSize: '1rem',
+                                        zIndex: 1,
+                                    }}
+                                >
+                                    $
+                                </span>
+                                <input
+                                    name="originalPrincipal"
+                                    type="number"
+                                    placeholder="Enter dollar amount"
+                                    className={styles.input}
+                                    style={{ paddingLeft: '2rem' }}
+                                    required
+                                />
+                            </div>
+                        </label>
+                        {originalPrincipalError && (
+                            <div className={styles.error}>{originalPrincipalError}</div>
+                        )}
+                    </div>
+                    <button type="submit" className={styles.submitBtn}>Add</button>
+                </form>
+            </div>
 
             {cusips.map(({ cusipId, originalPrincipal }, index) => (
-                <div key={`${index}_${cusipId}`} style={{ position: 'relative' }}>
+                <div key={`${index}_${cusipId}`} className={styles['cusip-card']}>
                     <CusipDetails cusip={cusipId} originalPrincipal={originalPrincipal} />
                     <button
                         onClick={() => handleRemoveCusip(cusipId)}
-                        style={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            background: '#dc3545',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            padding: '5px 10px',
-                            cursor: 'pointer',
-                            fontSize: '12px',
-                        }}
+                        className={styles['remove-btn']}
                     >
-                        Remove
+                        X
                     </button>
                 </div>
             ))}

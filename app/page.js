@@ -25,45 +25,50 @@ export default function Home() {
                 <h1 className={styles.title}>TIPS Calculator</h1>
                 <p className={styles.description}>Look up TIPS by CUSIP number</p>
 
-                <div style={{ marginBottom: '20px' }}>
+                <div style={{ marginBottom: '18px' }}>
                     <a
                         href="/resources"
                         style={{
-                            color: '#0070f3',
+                            color: '#3a5ca8',
                             textDecoration: 'none',
-                            fontSize: '16px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '8px',
+                            fontSize: '15px',
+                            fontWeight: 500,
+                            opacity: 0.85,
+                            transition: 'opacity 0.2s',
                         }}
+                        onMouseOver={e => (e.currentTarget.style.opacity = 1)}
+                        onMouseOut={e => (e.currentTarget.style.opacity = 0.85)}
                     >
                         What are TIPS? →
                     </a>
                 </div>
 
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        marginBottom: '20px',
-                    }}
-                >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
                     <button
                         onClick={handleClearAllData}
                         style={{
-                            backgroundColor: '#dc3545',
-                            color: 'white',
-                            border: 'none',
-                            padding: '10px 20px',
-                            borderRadius: '4px',
+                            backgroundColor: '#fff',
+                            color: '#dc3545',
+                            border: '1px solid #f0f0f0',
+                            padding: '8px 18px',
+                            borderRadius: '8px',
                             cursor: 'pointer',
                             fontSize: '14px',
+                            fontWeight: 500,
+                            boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
+                            transition: 'background 0.2s, color 0.2s',
+                        }}
+                        onMouseOver={e => {
+                            e.currentTarget.style.backgroundColor = '#ffeaea';
+                            e.currentTarget.style.color = '#b71c1c';
+                        }}
+                        onMouseOut={e => {
+                            e.currentTarget.style.backgroundColor = '#fff';
+                            e.currentTarget.style.color = '#dc3545';
                         }}
                     >
                         Clear All Data
                     </button>
-
                     <Tooltip content="Data is stored only in your browser">ℹ️</Tooltip>
                 </div>
 
