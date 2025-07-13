@@ -101,6 +101,12 @@ export default function CusipList() {
         setCusipError('')
         setOriginalPrincipalError('')
         event.target.reset()
+        
+        // Move focus back to CUSIP input
+        const cusipInput = event.target.querySelector('input[name="cusipId"]')
+        if (cusipInput) {
+            cusipInput.focus()
+        }
     }
 
     const handleRemoveCusip = (cusipId) => {
@@ -125,21 +131,6 @@ export default function CusipList() {
     return (
         <div className={styles.cusipList}>
             <Notification notification={notification} />
-
-            {!storageAvailable && (
-                <div
-                    style={{
-                        backgroundColor: '#fff3cd',
-                        color: '#856404',
-                        padding: '10px',
-                        marginBottom: '10px',
-                        borderRadius: '4px',
-                        border: '1px solid #ffeaa7',
-                    }}
-                >
-                    ⚠️ localStorage is not available. Your data will not persist between sessions.
-                </div>
-            )}
 
             <div className={styles['form-card']}>
                 <form className={styles.form} onSubmit={handleNewCusip} autoComplete="off">
