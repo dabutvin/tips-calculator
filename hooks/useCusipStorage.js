@@ -3,6 +3,7 @@ import {
     loadCusipsFromStorage,
     addCusipToStorage,
     removeCusipFromStorage,
+    saveCusipsToStorage,
     isLocalStorageAvailable,
 } from '../utils/localStorage'
 
@@ -80,6 +81,34 @@ export function useCusipStorage() {
         return true
     }, [storageAvailable])
 
+    // Reorder CUSIPs (for drag and drop)
+    const reorderCusips = useCallback((fromIndex, toIndex) => {
+        setCusips(prev => {
+            const newCusips = [...prev]
+            const [movedCusip] = newCusips.splice(fromIndex, 1)
+            newCusips.splice(toIndex, 0, movedCusip)
+            return newCusips
+        })
+
+        // Save to localStorage if available
+        if (storageAvailable) {
+            const currentData = loadCusipsFromStorage()
+            if (currentData.success) {
+                const newCusips = [...currentData.data]
+                const [movedCusip] = newCusips.splice(fromIndex, 1)
+                newCusips.splice(toIndex, 0, movedCusip)
+                const result = saveCusipsToStorage(newCusips)
+                if (!result.success) {
+                    console.error('Failed to save reordered CUSIPs to localStorage:', result.error)
+                    setError('Failed to save reordered CUSIPs')
+                    return false
+                }
+            }
+        }
+
+        return true
+    }, [storageAvailable])
+
     // Clear error
     const clearError = useCallback(() => {
         setError(null)
@@ -93,6 +122,7 @@ export function useCusipStorage() {
         error,
         addCusip,
         removeCusip,
+        reorderCusips,
         clearError
     }
 } 

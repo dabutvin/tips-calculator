@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 
-export function useCusipSorting(cusips, cusipData) {
-    const [sortBy, setSortBy] = useState('entry') // 'entry', 'maturity', 'adjusted'
+export function useCusipSorting(cusips, cusipData, onReorder) {
+    const [sortBy, setSortBy] = useState('maturity') // 'entry', 'maturity', 'adjusted'
     const [sortDirection, setSortDirection] = useState('asc') // 'asc', 'desc'
 
     const sortedCusips = useMemo(() => {
@@ -40,10 +40,18 @@ export function useCusipSorting(cusips, cusipData) {
         setSortDirection(newSortDirection)
     }
 
+    // Handle drag and drop reordering (only when in entry mode)
+    const handleReorder = useCallback((fromIndex, toIndex) => {
+        if (sortBy === 'entry' && onReorder) {
+            onReorder(fromIndex, toIndex)
+        }
+    }, [sortBy, onReorder])
+
     return {
         sortedCusips,
         sortBy,
         sortDirection,
-        handleSortChange
+        handleSortChange,
+        handleReorder
     }
 } 

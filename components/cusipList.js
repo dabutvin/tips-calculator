@@ -6,11 +6,13 @@ import CusipForm from '../components/CusipForm'
 import Notification from '../components/Notification'
 import SortControl from '../components/SortControl'
 import ConfirmationDialog from '../components/ConfirmationDialog'
+import DraggableCusipCard from '../components/DraggableCusipCard'
 import styles from '../styles/CusipList.module.css'
 import { useCusipSorting } from '../hooks/useCusipSorting'
 import { useCusipStorage } from '../hooks/useCusipStorage'
 import { useCollapseState } from '../hooks/useCollapseState'
 import { useNotification } from '../hooks/useNotification'
+import { useDragAndDrop } from '../hooks/useDragAndDrop'
 
 // Memoized CusipDetails wrapper to prevent unnecessary re-renders
 const MemoizedCusipDetails = memo(CusipDetails)
@@ -24,6 +26,7 @@ export default function CusipList() {
         error: storageError, 
         addCusip, 
         removeCusip, 
+        reorderCusips,
         clearError: clearStorageError 
     } = useCusipStorage()
     
@@ -40,8 +43,21 @@ export default function CusipList() {
     const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
     const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed
 
-    // Use the custom sorting hook
-    const { sortedCusips, sortBy, sortDirection, handleSortChange } = useCusipSorting(cusips, cusipData)
+    // Use the custom sorting hook with reorder callback
+    const { sortedCusips, sortBy, sortDirection, handleSortChange, handleReorder } = useCusipSorting(
+        cusips, 
+        cusipData, 
+        reorderCusips
+    )
+
+    // Use the custom drag and drop hook
+    const { 
+        dragState, 
+        handleDragStart, 
+        handleDragEnd, 
+        handleDragOver, 
+        handleDrop 
+    } = useDragAndDrop(handleReorder, showNotification)
 
     // Show storage errors as notifications
     useEffect(() => {
@@ -140,7 +156,16 @@ export default function CusipList() {
             )}
 
             {sortedCusips.map(({ cusipId, originalPrincipal }, index) => (
-                <div key={cusipId} className={styles['cusip-card']}>
+                <DraggableCusipCard
+                    key={cusipId}
+                    index={index}
+                    isDragging={dragState.isDragging && dragState.draggedIndex === index}
+                    sortBy={sortBy}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                >
                     <MemoizedCusipDetails 
                         cusip={cusipId} 
                         originalPrincipal={originalPrincipal} 
@@ -150,7 +175,7 @@ export default function CusipList() {
                         onRemove={createRemoveCallback(cusipId)}
                         onDataUpdate={handleCusipDataUpdate}
                     />
-                </div>
+                </DraggableCusipCard>
             ))}
 
             <ConfirmationDialog 

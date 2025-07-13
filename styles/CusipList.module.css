@@ -28,6 +28,7 @@
     align-items: center;
     gap: 1rem;
     margin-bottom: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .toggleAllBtn {
@@ -150,6 +151,60 @@
     width: 700px;
     max-width: 100vw;
     margin-top: 0;
+    transition: all 0.2s ease;
+}
+
+/* Drag and Drop Styles */
+.draggable {
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.draggable:active {
+    cursor: grabbing;
+}
+
+
+
+.dragging {
+    opacity: 0.6;
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 6px 20px rgba(0,0,0,0.1);
+    z-index: 10;
+    transition: all 0.1s ease;
+}
+
+.dragOver {
+    border: 2px dashed #0070f3;
+    background: rgba(0, 112, 243, 0.08);
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(0, 112, 243, 0.2);
+}
+
+.dragHint {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #1976d2;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid #90caf9;
+    animation: pulse 2s infinite;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Confirmation Dialog Styles */
