@@ -164,38 +164,43 @@ export default function CusipDetails({
         return (
             <div className={`${styles.cusipDetails} ${isMature ? styles.matured : ''}`}>
                 <div className={styles.collapsedView}>
+                    <button onClick={onToggle} className={styles.collapsedToggleBtn}>
+                        {isCollapsed ? '▶' : '▼'}
+                    </button>
                     <div className={styles.collapsedContent}>
-                        <button onClick={onToggle} className={styles.collapsedToggleBtn}>
-                            {isCollapsed ? '▶' : '▼'}
-                        </button>
-                        <div className={styles.collapsedField}>
-                            <span className={styles.collapsedLabel}>CUSIP:</span>
-                            <span className={styles.collapsedValue}>{cusip}</span>
+                        <div className={styles.collapsedMobileRowPrimary}>
+                            <div className={styles.collapsedField}>
+                                <span className={styles.collapsedLabel}>CUSIP:</span>
+                                <span className={styles.collapsedValue}>{cusip}</span>
+                            </div>
+                            <div className={styles.collapsedField}>
+                                <span className={styles.collapsedLabel}>
+                                    {isMature ? 'Final:' : 'Current:'}
+                                </span>
+                                <span className={styles.collapsedValue}>
+                                    ${Number(adjustedPrincipal).toFixed(0)}
+                                </span>
+                            </div>
                         </div>
-                        <div className={styles.collapsedField}>
-                            <span className={styles.collapsedLabel}>Maturity:</span>
-                            <span className={styles.collapsedValue}>
-                                {securityDetails?.maturityDate
-                                    ? new Date(securityDetails.maturityDate).toLocaleDateString()
-                                    : 'N/A'}
-                            </span>
+                        <div className={styles.collapsedMobileRowSecondary}>
+                            <div className={styles.collapsedField}>
+                                <span className={styles.collapsedLabel}>Original:</span>
+                                <span className={styles.collapsedValue}>${originalPrincipal}</span>
+                            </div>
+                            <div className={styles.collapsedField}>
+                                <span className={styles.collapsedLabel}>Maturity:</span>
+                                <span className={styles.collapsedValue}>
+                                    {securityDetails?.maturityDate
+                                        ? new Date(securityDetails.maturityDate).toLocaleDateString()
+                                        : 'N/A'}
+                                </span>
+                            </div>
                         </div>
+                        {/* Hidden on mobile via CSS but shown on desktop */}
                         <div className={styles.collapsedField}>
                             <span className={styles.collapsedLabel}>Rate:</span>
                             <span className={styles.collapsedValue}>
                                 {Number(securityDetails?.interestRate).toFixed(3)}%
-                            </span>
-                        </div>
-                        <div className={styles.collapsedField}>
-                            <span className={styles.collapsedLabel}>Original:</span>
-                            <span className={styles.collapsedValue}>${originalPrincipal}</span>
-                        </div>
-                        <div className={styles.collapsedField}>
-                            <span className={styles.collapsedLabel}>
-                                {isMature ? 'Final:' : 'Current:'}
-                            </span>
-                            <span className={styles.collapsedValue}>
-                                ${Number(adjustedPrincipal).toFixed(0)}
                             </span>
                         </div>
                     </div>
