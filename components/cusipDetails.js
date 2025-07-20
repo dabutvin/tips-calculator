@@ -7,6 +7,29 @@ import { useEffect, useState } from 'react'
 import { getCpiEntries, getSecurityDetails } from '../actions/treasuryApi'
 import styles from '../styles/CusipDetails.module.css'
 
+// Helper functions for maturity detection and CPI entry selection
+const isSecurityMature = (maturityDate) => {
+    if (!maturityDate) return false
+    return new Date() > new Date(maturityDate)
+}
+
+const getFinalCpiEntry = (cpiEntries) => {
+    if (!cpiEntries || cpiEntries.length === 0) return null
+    // CPI entries come sorted by date DESC, so first entry is the most recent (final entry chronologically)
+    return cpiEntries[0]
+}
+
+const getCurrentOrFinalEntry = (cpiEntries, isMature) => {
+    if (isMature) {
+        return getFinalCpiEntry(cpiEntries)
+    } else {
+        // Current logic for finding today's entry
+        return cpiEntries.find(
+            (entry) => entry.indexDate == format(new Date(), 'YYYY-MM-DDT00:00:00'),
+        )
+    }
+}
+
 export default function CusipDetails({
     cusip,
     originalPrincipal,
@@ -23,7 +46,7 @@ export default function CusipDetails({
     const [cpiChartData, setCpiChartData] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
-
+    const [isMature, setIsMature] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,13 +60,16 @@ export default function CusipDetails({
                 let securityDetailsResponse = await getSecurityDetails(cusip)
                 setSecurityDetails(securityDetailsResponse)
 
-                // find today's entry by matching the current date with the indexDate
-                let todaysEntry = cpiEntriesResponse.find(
-                    (entry) => entry.indexDate == format(new Date(), 'YYYY-MM-DDT00:00:00'),
-                )
-                setCurrentCpiEntry(todaysEntry)
+                // Detect if security is mature
+                const securityIsMature = isSecurityMature(securityDetailsResponse?.maturityDate)
+                setIsMature(securityIsMature)
+
+                // Get appropriate CPI entry (current for active, final for mature)
+                let relevantEntry = getCurrentOrFinalEntry(cpiEntriesResponse, securityIsMature)
+                setCurrentCpiEntry(relevantEntry)
+
                 const adjustedPrincipalValue = (
-                    todaysEntry?.dailyIndex * originalPrincipal
+                    relevantEntry?.dailyIndex * originalPrincipal
                 ).toFixed(2)
                 setAdjustedPrincipal(adjustedPrincipalValue)
 
@@ -54,6 +80,7 @@ export default function CusipDetails({
                         maturityDate: securityDetailsResponse?.maturityDate,
                         adjustedPrincipal: parseFloat(adjustedPrincipalValue),
                         originalPrincipal: parseFloat(originalPrincipal),
+                        isMature: securityIsMature,
                     })
                 }
 
@@ -77,6 +104,7 @@ export default function CusipDetails({
                 setCurrentCpiEntry(null)
                 setAdjustedPrincipal(null)
                 setCpiChartData(null)
+                setIsMature(false)
             } finally {
                 setIsLoading(false)
             }
@@ -95,7 +123,7 @@ export default function CusipDetails({
 
     if (error) {
         return (
-            <div className={styles.cusipDetails}>
+            <div className={`${styles.cusipDetails} ${isMature ? styles.matured : ''}`}>
                 <div className={styles.expandedHeaderError}>
                     <button onClick={onRemove} className={styles.expandedRemoveBtn}>
                         X
@@ -132,7 +160,7 @@ export default function CusipDetails({
     // Collapsed view - show only essential fields horizontally
     if (collapsed) {
         return (
-            <div className={styles.cusipDetails}>
+            <div className={`${styles.cusipDetails} ${isMature ? styles.matured : ''}`}>
                 <div className={styles.collapsedView}>
                     <div className={styles.collapsedContent}>
                         <button onClick={onToggle} className={styles.collapsedToggleBtn}>
@@ -161,7 +189,9 @@ export default function CusipDetails({
                             <span className={styles.collapsedValue}>${originalPrincipal}</span>
                         </div>
                         <div className={styles.collapsedField}>
-                            <span className={styles.collapsedLabel}>Current:</span>
+                            <span className={styles.collapsedLabel}>
+                                {isMature ? 'Final:' : 'Current:'}
+                            </span>
                             <span className={styles.collapsedValue}>
                                 ${Number(adjustedPrincipal).toFixed(0)}
                             </span>
@@ -177,7 +207,7 @@ export default function CusipDetails({
 
     // Full expanded view
     return (
-        <div className={styles.cusipDetails}>
+        <div className={`${styles.cusipDetails} ${isMature ? styles.matured : ''}`}>
             <div className={styles.expandedHeader}>
                 <button onClick={onToggle} className={styles.expandedToggleBtn}>
                     {isCollapsed ? '▶' : '▼'}
@@ -193,7 +223,9 @@ export default function CusipDetails({
                         <td>{cusip}</td>
                     </tr>
                     <tr>
-                        <td>Current Adjusted Principal:</td>
+                        <td>
+                            {isMature ? 'Final Adjusted Principal:' : 'Current Adjusted Principal:'}
+                        </td>
                         <td>${adjustedPrincipal}</td>
                     </tr>
                     <tr>
@@ -201,7 +233,7 @@ export default function CusipDetails({
                         <td>${originalPrincipal}</td>
                     </tr>
                     <tr>
-                        <td>Current Index Ratio:</td>
+                        <td>{isMature ? 'Final Index Ratio:' : 'Current Index Ratio:'}</td>
                         <td>{Number(currentCpiEntry?.dailyIndex)}</td>
                     </tr>
                     <tr>

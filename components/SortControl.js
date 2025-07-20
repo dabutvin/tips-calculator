@@ -24,8 +24,8 @@ export default function SortControl({ sortBy, sortDirection, onSortChange }) {
             >
                 <option value="maturity-asc">Maturity Date (Earliest First)</option>
                 <option value="maturity-desc">Maturity Date (Latest First)</option>
-                <option value="adjusted-asc">Current Adjusted Principal (Low to High)</option>
-                <option value="adjusted-desc">Current Adjusted Principal (High to Low)</option>
+                <option value="adjusted-asc">Adjusted Principal (Low to High)</option>
+                <option value="adjusted-desc">Adjusted Principal (High to Low)</option>
                 <option value="entry-asc">Manual</option>
             </select>
         </div>

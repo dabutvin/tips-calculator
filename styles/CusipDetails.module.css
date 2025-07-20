@@ -2,6 +2,11 @@
     padding: 10px 20px;
 }
 
+.cusipDetails.matured {
+    background-color: #e8e8e8;
+    border-radius: 12px;
+}
+
 .cusipDetails table td:nth-child(2) {
     font-weight: 600;
 }
