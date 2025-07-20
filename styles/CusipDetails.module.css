@@ -129,40 +129,8 @@
     background: yellow;
 }
 
-.caretHeader {
-    width: 30px;
-    cursor: pointer;
-    text-align: center;
-    padding: 8px 4px;
-}
-
-.caret {
-    font-size: 12px;
-    color: #007bff;
-}
-
 .tableContainer {
     overflow: hidden;
-}
-
-.tableContainer.collapsed {
-    max-height: 180px;
-    position: relative;
-}
-
-.tableContainer.collapsed::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    background: linear-gradient(transparent, white);
-    pointer-events: none;
-}
-
-.fadeOut {
-    opacity: 0.3;
 }
 
 .chartContainer {
