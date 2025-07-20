@@ -80,6 +80,7 @@ export default function CusipDetails({
                         maturityDate: securityDetailsResponse?.maturityDate,
                         adjustedPrincipal: parseFloat(adjustedPrincipalValue),
                         originalPrincipal: parseFloat(originalPrincipal),
+                        interestRate: parseFloat(securityDetailsResponse?.interestRate),
                         isMature: securityIsMature,
                         uniqueId: uniqueId,
                     })

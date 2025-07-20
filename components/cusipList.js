@@ -83,11 +83,11 @@ export default function CusipList() {
         setCusipData((prev) => {
             const newData = {
                 ...prev,
-                [data.cusipId]: data,
+                [data.uniqueId]: data,
             }
 
             // Only highlight if the flag is set and this is a new CUSIP
-            if (shouldHighlightNext.current && !prev[data.cusipId] && data.uniqueId) {
+            if (shouldHighlightNext.current && !prev[data.uniqueId] && data.uniqueId) {
                 setHighlightedCusip(data.uniqueId)
                 setTimeout(() => {
                     setHighlightedCusip(null)
@@ -129,11 +129,11 @@ export default function CusipList() {
             // Remove collapsed state
             removeCollapsedState(uniqueId)
 
-            // Remove cached data for this CUSIP (using cusipId for data cache)
+            // Remove cached data for this CUSIP (using uniqueId for data cache)
             if (cusipToRemove) {
                 setCusipData((prev) => {
                     const newData = { ...prev }
-                    delete newData[cusipToRemove.cusipId]
+                    delete newData[uniqueId]
                     return newData
                 })
             }

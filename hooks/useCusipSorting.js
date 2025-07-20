@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 
 export function useCusipSorting(cusips, cusipData, onReorder) {
-    const [sortBy, setSortBy] = useState('maturity') // 'entry', 'maturity', 'adjusted'
+    const [sortBy, setSortBy] = useState('maturity') // 'entry', 'maturity', 'adjusted', 'interest'
     const [sortDirection, setSortDirection] = useState('asc') // 'asc', 'desc'
 
     const sortedCusips = useMemo(() => {
@@ -10,8 +10,8 @@ export function useCusipSorting(cusips, cusipData, onReorder) {
         }
 
         return cusips.sort((a, b) => {
-            const aData = cusipData[a.cusipId]
-            const bData = cusipData[b.cusipId]
+            const aData = cusipData[a.uniqueId]
+            const bData = cusipData[b.uniqueId]
 
             let aValue, bValue
 
@@ -23,8 +23,11 @@ export function useCusipSorting(cusips, cusipData, onReorder) {
                 if (!aValue) return sortDirection === 'asc' ? 1 : -1
                 if (!bValue) return sortDirection === 'asc' ? -1 : 1
             } else if (sortBy === 'adjusted') {
-                aValue = aData?.adjustedPrincipal || a.originalPrincipal
-                bValue = bData?.adjustedPrincipal || b.originalPrincipal
+                aValue = aData?.adjustedPrincipal ? Number(aData.adjustedPrincipal) : Number(a.originalPrincipal)
+                bValue = bData?.adjustedPrincipal ? Number(bData.adjustedPrincipal) : Number(b.originalPrincipal)
+            } else if (sortBy === 'interest') {
+                aValue = aData?.interestRate || 0
+                bValue = bData?.interestRate || 0
             }
 
             if (sortDirection === 'asc') {
