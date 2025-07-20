@@ -100,15 +100,15 @@ export const addCusipToStorage = (cusip) => {
     }
 }
 
-// Remove CUSIP from localStorage
-export const removeCusipFromStorage = (cusipId) => {
+// Remove CUSIP from localStorage by uniqueId
+export const removeCusipFromStorage = (uniqueId) => {
     try {
         const currentData = loadCusipsFromStorage()
         if (!currentData.success) {
             return currentData
         }
 
-        const updatedData = currentData.data.filter((cusip) => cusip.cusipId !== cusipId)
+        const updatedData = currentData.data.filter((cusip) => cusip.uniqueId !== uniqueId)
         return saveCusipsToStorage(updatedData)
     } catch (error) {
         return handleStorageError(error, 'remove')

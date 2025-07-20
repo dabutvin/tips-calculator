@@ -44,7 +44,7 @@ export default function CusipList() {
     } = useCollapseState()
 
     const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
-    const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed
+    const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed (stores { uniqueId, cusipId, originalPrincipal })
     const [highlightedCusip, setHighlightedCusip] = useState(null) // Track CUSIP to highlight
     const shouldHighlightNext = useRef(false) // Flag to enable highlighting for next CUSIP
 
@@ -87,8 +87,8 @@ export default function CusipList() {
             }
 
             // Only highlight if the flag is set and this is a new CUSIP
-            if (shouldHighlightNext.current && !prev[data.cusipId]) {
-                setHighlightedCusip(data.cusipId)
+            if (shouldHighlightNext.current && !prev[data.cusipId] && data.uniqueId) {
+                setHighlightedCusip(data.uniqueId)
                 setTimeout(() => {
                     setHighlightedCusip(null)
                 }, 1000)
@@ -99,14 +99,14 @@ export default function CusipList() {
     }, [])
 
     const handleNewCusip = (newCusip) => {
-        // Add CUSIP using storage hook
-        const success = addCusip(newCusip)
-        if (!success) {
+        // Add CUSIP using storage hook (this will add the uniqueId)
+        const result = addCusip(newCusip)
+        if (!result.success) {
             return false
         }
 
-        // Add collapsed state for new CUSIP
-        addCollapsedState(newCusip.cusipId)
+        // Add collapsed state for new CUSIP using uniqueId
+        addCollapsedState(result.cusip.uniqueId)
 
         // Enable highlighting for the next CUSIP that loads data
         shouldHighlightNext.current = true
@@ -115,35 +115,40 @@ export default function CusipList() {
     }
 
     const handleRemoveCusip = useCallback(
-        (cusipId) => {
+        (uniqueId) => {
+            // Find the CUSIP to get its cusipId for user feedback
+            const cusipToRemove = cusips.find((cusip) => cusip.uniqueId === uniqueId)
+
             // Remove CUSIP using storage hook
-            const success = removeCusip(cusipId)
+            const success = removeCusip(uniqueId)
             if (!success) {
                 showNotification('Failed to remove CUSIP', 'error')
                 return
             }
 
             // Remove collapsed state
-            removeCollapsedState(cusipId)
+            removeCollapsedState(uniqueId)
 
-            // Remove cached data for this CUSIP
-            setCusipData((prev) => {
-                const newData = { ...prev }
-                delete newData[cusipId]
-                return newData
-            })
+            // Remove cached data for this CUSIP (using cusipId for data cache)
+            if (cusipToRemove) {
+                setCusipData((prev) => {
+                    const newData = { ...prev }
+                    delete newData[cusipToRemove.cusipId]
+                    return newData
+                })
+            }
 
             // Clear the confirmation dialog
             setCusipToRemove(null)
             showNotification('CUSIP removed successfully', 'success')
         },
-        [removeCusip, removeCollapsedState, showNotification],
+        [removeCusip, removeCollapsedState, showNotification, cusips],
     )
 
     // Handle confirmation dialog
     const handleConfirmRemove = useCallback(() => {
         if (cusipToRemove) {
-            handleRemoveCusip(cusipToRemove)
+            handleRemoveCusip(cusipToRemove.uniqueId)
         }
     }, [cusipToRemove, handleRemoveCusip])
 
@@ -152,9 +157,19 @@ export default function CusipList() {
     }, [])
 
     // Create stable callback for remove - now shows confirmation dialog
-    const createRemoveCallback = useCallback((cusipId) => {
-        return () => setCusipToRemove(cusipId)
-    }, [])
+    const createRemoveCallback = useCallback(
+        (uniqueId) => {
+            return () => {
+                const cusip = cusips.find((c) => c.uniqueId === uniqueId)
+                setCusipToRemove({
+                    uniqueId,
+                    cusipId: cusip?.cusipId || 'Unknown',
+                    originalPrincipal: cusip?.originalPrincipal || 'Unknown',
+                })
+            }
+        },
+        [cusips],
+    )
 
     if (loading) {
         return <div className={styles.cusipList}>Loading saved CUSIPs...</div>
@@ -196,9 +211,9 @@ export default function CusipList() {
                 </div>
             )}
 
-            {sortedCusips.map(({ cusipId, originalPrincipal }, index) => (
+            {sortedCusips.map(({ cusipId, originalPrincipal, uniqueId }, index) => (
                 <DraggableCusipCard
-                    key={cusipId}
+                    key={uniqueId}
                     index={index}
                     isDragging={dragState.isDragging && dragState.draggedIndex === index}
                     sortBy={sortBy}
@@ -206,23 +221,24 @@ export default function CusipList() {
                     onDragEnd={handleDragEnd}
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
-                    highlight={highlightedCusip === cusipId}
+                    highlight={highlightedCusip === uniqueId}
                 >
                     <MemoizedCusipDetails
                         cusip={cusipId}
                         originalPrincipal={originalPrincipal}
-                        collapsed={getCollapsedState(cusipId)}
-                        onToggle={createToggleCallback(cusipId)}
-                        isCollapsed={getCollapsedState(cusipId)}
-                        onRemove={createRemoveCallback(cusipId)}
+                        collapsed={getCollapsedState(uniqueId)}
+                        onToggle={createToggleCallback(uniqueId)}
+                        isCollapsed={getCollapsedState(uniqueId)}
+                        onRemove={createRemoveCallback(uniqueId)}
                         onDataUpdate={handleCusipDataUpdate}
+                        uniqueId={uniqueId}
                     />
                 </DraggableCusipCard>
             ))}
 
             <ConfirmationDialog
                 isOpen={!!cusipToRemove}
-                message={`Are you sure you want to remove CUSIP ${cusipToRemove} from your list?`}
+                message={`Are you sure you want to remove CUSIP ${cusipToRemove?.cusipId} (${cusipToRemove?.originalPrincipal ? `$${cusipToRemove.originalPrincipal}` : 'Unknown amount'}) from your list?`}
                 confirmText="Remove"
                 cancelText="Cancel"
                 onConfirm={handleConfirmRemove}

@@ -48,33 +48,39 @@ export function useCusipStorage() {
     // Add a new CUSIP
     const addCusip = useCallback(
         (newCusip) => {
+            // Create a CUSIP with a unique ID for React keys
+            const cusipWithUniqueId = {
+                ...newCusip,
+                uniqueId: `${newCusip.cusipId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            }
+
             // Update local state
-            setCusips((prev) => [...prev, newCusip])
+            setCusips((prev) => [...prev, cusipWithUniqueId])
 
             // Save to localStorage if available
             if (storageAvailable) {
-                const result = addCusipToStorage(newCusip)
+                const result = addCusipToStorage(cusipWithUniqueId)
                 if (!result.success) {
                     console.error('Failed to save CUSIP to localStorage:', result.error)
                     setError('Failed to save CUSIP')
-                    return false
+                    return { success: false }
                 }
             }
 
-            return true
+            return { success: true, cusip: cusipWithUniqueId }
         },
         [storageAvailable],
     )
 
     // Remove a CUSIP
     const removeCusip = useCallback(
-        (cusipId) => {
+        (uniqueId) => {
             // Update local state
-            setCusips((prev) => prev.filter((cusip) => cusip.cusipId !== cusipId))
+            setCusips((prev) => prev.filter((cusip) => cusip.uniqueId !== uniqueId))
 
             // Remove from localStorage if available
             if (storageAvailable) {
-                const result = removeCusipFromStorage(cusipId)
+                const result = removeCusipFromStorage(uniqueId)
                 if (!result.success) {
                     console.error('Failed to remove CUSIP from localStorage:', result.error)
                     setError('Failed to remove CUSIP')

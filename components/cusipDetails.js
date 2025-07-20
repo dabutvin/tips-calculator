@@ -38,6 +38,7 @@ export default function CusipDetails({
     isCollapsed,
     onRemove,
     onDataUpdate,
+    uniqueId,
 }) {
     const [cpiEntries, setCpiEntries] = useState(null)
     const [securityDetails, setSecurityDetails] = useState(null)
@@ -81,6 +82,7 @@ export default function CusipDetails({
                         adjustedPrincipal: parseFloat(adjustedPrincipalValue),
                         originalPrincipal: parseFloat(originalPrincipal),
                         isMature: securityIsMature,
+                        uniqueId: uniqueId,
                     })
                 }
 
