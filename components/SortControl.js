@@ -6,7 +6,15 @@ import styles from '../styles/CusipList.module.css'
 export default function SortControl({ sortBy, sortDirection, onSortChange }) {
     return (
         <div className={styles.sortControls}>
-            <select 
+            <label
+                htmlFor="sortSelect"
+                style={{
+                    marginRight: '8px',
+                }}
+            >
+                Sort by:
+            </label>
+            <select
                 value={`${sortBy}-${sortDirection}`}
                 onChange={(e) => {
                     const [newSortBy, newSortDirection] = e.target.value.split('-')
@@ -22,4 +30,4 @@ export default function SortControl({ sortBy, sortDirection, onSortChange }) {
             </select>
         </div>
     )
-} 
+}

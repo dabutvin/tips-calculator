@@ -41,17 +41,20 @@ export function useCusipSorting(cusips, cusipData, onReorder) {
     }
 
     // Handle drag and drop reordering (only when in entry mode)
-    const handleReorder = useCallback((fromIndex, toIndex) => {
-        if (sortBy === 'entry' && onReorder) {
-            onReorder(fromIndex, toIndex)
-        }
-    }, [sortBy, onReorder])
+    const handleReorder = useCallback(
+        (fromIndex, toIndex) => {
+            if (sortBy === 'entry' && onReorder) {
+                onReorder(fromIndex, toIndex)
+            }
+        },
+        [sortBy, onReorder],
+    )
 
     return {
         sortedCusips,
         sortBy,
         sortDirection,
         handleSortChange,
-        handleReorder
+        handleReorder,
     }
-} 
+}

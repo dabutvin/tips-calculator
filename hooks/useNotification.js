@@ -3,12 +3,13 @@ import { useState, useCallback } from 'react'
 export function useNotification(autoDismissTime = 3000) {
     const [notification, setNotification] = useState(null)
 
-    const showNotification = useCallback((message, type = 'error') => {
-        if (type === 'error') {
+    const showNotification = useCallback(
+        (message, type = 'error') => {
             setNotification({ message, type })
             setTimeout(() => setNotification(null), autoDismissTime)
-        }
-    }, [autoDismissTime])
+        },
+        [autoDismissTime],
+    )
 
     const clearNotification = useCallback(() => {
         setNotification(null)
@@ -17,6 +18,6 @@ export function useNotification(autoDismissTime = 3000) {
     return {
         notification,
         showNotification,
-        clearNotification
+        clearNotification,
     }
-} 
+}

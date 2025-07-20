@@ -44,7 +44,7 @@ export default function CusipForm({ onAddCusip, onError }) {
         setCusipError('')
         setOriginalPrincipalError('')
         event.target.reset()
-        
+
         // Move focus back to CUSIP input
         const cusipInput = event.target.querySelector('input[name="cusipId"]')
         if (cusipInput) {
@@ -67,14 +67,14 @@ export default function CusipForm({ onAddCusip, onError }) {
                             required
                         />
                     </label>
-                    {cusipError && (
-                        <div className={styles.error}>{cusipError}</div>
-                    )}
+                    {cusipError && <div className={styles.error}>{cusipError}</div>}
                 </div>
                 <div>
                     <label>
                         Original Principal:
-                        <div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+                        <div
+                            style={{ position: 'relative', display: 'inline-block', width: '100%' }}
+                        >
                             <span
                                 style={{
                                     position: 'absolute',
@@ -102,8 +102,10 @@ export default function CusipForm({ onAddCusip, onError }) {
                         <div className={styles.error}>{originalPrincipalError}</div>
                     )}
                 </div>
-                <button type="submit" className={styles.submitBtn}>Add</button>
+                <button type="submit" className={styles.submitBtn}>
+                    Add
+                </button>
             </form>
         </div>
     )
-} 
+}

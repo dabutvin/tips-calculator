@@ -7,7 +7,15 @@ import { useEffect, useState } from 'react'
 import { getCpiEntries, getSecurityDetails } from '../actions/treasuryApi'
 import styles from '../styles/CusipDetails.module.css'
 
-export default function CusipDetails({ cusip, originalPrincipal, collapsed = false, onToggle, isCollapsed, onRemove, onDataUpdate }) {
+export default function CusipDetails({
+    cusip,
+    originalPrincipal,
+    collapsed = false,
+    onToggle,
+    isCollapsed,
+    onRemove,
+    onDataUpdate,
+}) {
     const [cpiEntries, setCpiEntries] = useState(null)
     const [securityDetails, setSecurityDetails] = useState(null)
     const [currentCpiEntry, setCurrentCpiEntry] = useState(null)
@@ -34,7 +42,9 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
                     (entry) => entry.indexDate == format(new Date(), 'YYYY-MM-DDT00:00:00'),
                 )
                 setCurrentCpiEntry(todaysEntry)
-                const adjustedPrincipalValue = (todaysEntry?.dailyIndex * originalPrincipal).toFixed(2)
+                const adjustedPrincipalValue = (
+                    todaysEntry?.dailyIndex * originalPrincipal
+                ).toFixed(2)
                 setAdjustedPrincipal(adjustedPrincipalValue)
 
                 // Notify parent component of the data for sorting
@@ -43,7 +53,7 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
                         cusipId: cusip,
                         maturityDate: securityDetailsResponse?.maturityDate,
                         adjustedPrincipal: parseFloat(adjustedPrincipalValue),
-                        originalPrincipal: parseFloat(originalPrincipal)
+                        originalPrincipal: parseFloat(originalPrincipal),
                     })
                 }
 
@@ -120,10 +130,7 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
             <div className={styles.cusipDetails}>
                 <div className={styles.collapsedView}>
                     <div className={styles.collapsedContent}>
-                        <button
-                            onClick={onToggle}
-                            className={styles.collapsedToggleBtn}
-                        >
+                        <button onClick={onToggle} className={styles.collapsedToggleBtn}>
                             {isCollapsed ? '▶' : '▼'}
                         </button>
                         <div className={styles.collapsedField}>
@@ -133,12 +140,16 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
                         <div className={styles.collapsedField}>
                             <span className={styles.collapsedLabel}>Maturity:</span>
                             <span className={styles.collapsedValue}>
-                                {securityDetails?.maturityDate ? new Date(securityDetails.maturityDate).toLocaleDateString() : 'N/A'}
+                                {securityDetails?.maturityDate
+                                    ? new Date(securityDetails.maturityDate).toLocaleDateString()
+                                    : 'N/A'}
                             </span>
                         </div>
                         <div className={styles.collapsedField}>
                             <span className={styles.collapsedLabel}>Rate:</span>
-                            <span className={styles.collapsedValue}>{Number(securityDetails?.interestRate).toFixed(3)}%</span>
+                            <span className={styles.collapsedValue}>
+                                {Number(securityDetails?.interestRate).toFixed(3)}%
+                            </span>
                         </div>
                         <div className={styles.collapsedField}>
                             <span className={styles.collapsedLabel}>Original:</span>
@@ -146,13 +157,12 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
                         </div>
                         <div className={styles.collapsedField}>
                             <span className={styles.collapsedLabel}>Current:</span>
-                            <span className={styles.collapsedValue}>${Number(adjustedPrincipal).toFixed(0)}</span>
+                            <span className={styles.collapsedValue}>
+                                ${Number(adjustedPrincipal).toFixed(0)}
+                            </span>
                         </div>
                     </div>
-                    <button
-                        onClick={onRemove}
-                        className={styles.collapsedRemoveBtn}
-                    >
+                    <button onClick={onRemove} className={styles.collapsedRemoveBtn}>
                         X
                     </button>
                 </div>
@@ -164,16 +174,10 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
     return (
         <div className={styles.cusipDetails}>
             <div className={styles.expandedHeader}>
-                <button
-                    onClick={onToggle}
-                    className={styles.expandedToggleBtn}
-                >
+                <button onClick={onToggle} className={styles.expandedToggleBtn}>
                     {isCollapsed ? '▶' : '▼'}
                 </button>
-                <button
-                    onClick={onRemove}
-                    className={styles.expandedRemoveBtn}
-                >
+                <button onClick={onRemove} className={styles.expandedRemoveBtn}>
                     X
                 </button>
             </div>
@@ -244,7 +248,7 @@ export default function CusipDetails({ cusip, originalPrincipal, collapsed = fal
                                 value: `$${Math.round(adjustedPrincipal)}`,
                                 position: 'left',
                                 offset: 1,
-                                style: { transform: 'translateY(-30px)' }
+                                style: { transform: 'translateY(-30px)' },
                             }}
                         />
                     </LineChart>

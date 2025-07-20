@@ -16,19 +16,35 @@
 .form-card {
     background: #fff;
     border-radius: 14px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.04), 0 1.5px 6px rgba(0,0,0,0.03);
+    box-shadow:
+        0 2px 16px rgba(0, 0, 0, 0.04),
+        0 1.5px 6px rgba(0, 0, 0, 0.03);
     padding: 2rem 2.5rem 2rem 2.5rem;
     width: 100%;
 }
 
 .cardsHeader {
-    width: 100%;
+    width: 700px;
+    max-width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
     margin-bottom: 0.5rem;
     flex-wrap: wrap;
+}
+
+.actionButtons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.clearButtonContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .toggleAllBtn {
@@ -50,6 +66,29 @@
 .toggleAllBtn:hover {
     background: #e9ecef;
     border-color: #0070f3;
+}
+
+.clearAllBtn {
+    background: #fff;
+    color: #dc3545;
+    border: 1px solid #f0f0f0;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    min-width: 120px;
+    white-space: nowrap;
+    height: 36px;
+    box-sizing: border-box;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.clearAllBtn:hover {
+    background: #ffeaea;
+    color: #b71c1c;
+    border-color: #dc3545;
 }
 
 .sortControls {
@@ -98,8 +137,8 @@
     margin-bottom: 0.3rem;
 }
 
-.cusipList input[type="text"],
-.cusipList input[type="number"] {
+.cusipList input[type='text'],
+.cusipList input[type='number'] {
     width: 100%;
     padding: 0.7rem 1rem;
     border: 1px solid #e0e0e0;
@@ -111,13 +150,13 @@
     margin-top: 0.2rem;
 }
 
-.cusipList input[type="text"]:focus,
-.cusipList input[type="number"]:focus {
+.cusipList input[type='text']:focus,
+.cusipList input[type='number']:focus {
     border: 1.5px solid #0070f3;
     background: #fff;
 }
 
-.cusipList button[type="submit"] {
+.cusipList button[type='submit'] {
     background: #111;
     color: #fff;
     border: none;
@@ -130,7 +169,7 @@
     transition: background 0.2s;
 }
 
-.cusipList button[type="submit"]:hover {
+.cusipList button[type='submit']:hover {
     background: #0070f3;
 }
 
@@ -145,7 +184,9 @@
     position: relative;
     background: #fff;
     border-radius: 14px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.04), 0 1.5px 6px rgba(0,0,0,0.03);
+    box-shadow:
+        0 2px 16px rgba(0, 0, 0, 0.04),
+        0 1.5px 6px rgba(0, 0, 0, 0.03);
     margin-bottom: 0;
     display: inline-block;
     width: 700px;
@@ -162,15 +203,21 @@
 @keyframes highlightPulse {
     0% {
         background: #fff;
-        box-shadow: 0 2px 16px rgba(0,0,0,0.04), 0 1.5px 6px rgba(0,0,0,0.03);
+        box-shadow:
+            0 2px 16px rgba(0, 0, 0, 0.04),
+            0 1.5px 6px rgba(0, 0, 0, 0.03);
     }
     50% {
         background: #e3f2fd;
-        box-shadow: 0 4px 24px rgba(0, 112, 243, 0.15), 0 2px 12px rgba(0, 112, 243, 0.1);
+        box-shadow:
+            0 4px 24px rgba(0, 112, 243, 0.15),
+            0 2px 12px rgba(0, 112, 243, 0.1);
     }
     100% {
         background: #fff;
-        box-shadow: 0 2px 16px rgba(0,0,0,0.04), 0 1.5px 6px rgba(0,0,0,0.03);
+        box-shadow:
+            0 2px 16px rgba(0, 0, 0, 0.04),
+            0 1.5px 6px rgba(0, 0, 0, 0.03);
     }
 }
 
@@ -186,12 +233,12 @@
     cursor: grabbing;
 }
 
-
-
 .dragging {
     opacity: 0.6;
     transform: scale(1.05);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 6px 20px rgba(0,0,0,0.1);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.15),
+        0 6px 20px rgba(0, 0, 0, 0.1);
     z-index: 10;
     transition: all 0.1s ease;
 }
@@ -245,7 +292,9 @@
 .confirmationDialog {
     background: #fff;
     border-radius: 14px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.15), 0 2px 12px rgba(0,0,0,0.1);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.15),
+        0 2px 12px rgba(0, 0, 0, 0.1);
     padding: 2rem;
     max-width: 400px;
     width: 100%;

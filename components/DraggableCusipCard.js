@@ -3,38 +3,47 @@
 import React, { useState, useRef, useCallback } from 'react'
 import styles from '../styles/CusipList.module.css'
 
-export default function DraggableCusipCard({ 
-    children, 
-    index, 
-    isDragging, 
+export default function DraggableCusipCard({
+    children,
+    index,
+    isDragging,
     sortBy,
-    onDragStart, 
-    onDragEnd, 
-    onDragOver, 
+    onDragStart,
+    onDragEnd,
+    onDragOver,
     onDrop,
-    highlight = false
+    highlight = false,
 }) {
     const [isDragOver, setIsDragOver] = useState(false)
     const cardRef = useRef(null)
 
-    const handleDragStart = useCallback((e) => {
-        // Allow drag to start from anywhere on the card
-        e.dataTransfer.effectAllowed = 'move'
-        e.dataTransfer.setData('text/html', e.target.outerHTML)
-        onDragStart(index)
-    }, [index, onDragStart])
+    const handleDragStart = useCallback(
+        (e) => {
+            // Allow drag to start from anywhere on the card
+            e.dataTransfer.effectAllowed = 'move'
+            e.dataTransfer.setData('text/html', e.target.outerHTML)
+            onDragStart(index)
+        },
+        [index, onDragStart],
+    )
 
-    const handleDragEnd = useCallback((e) => {
-        setIsDragOver(false)
-        onDragEnd()
-    }, [onDragEnd, index])
+    const handleDragEnd = useCallback(
+        (e) => {
+            setIsDragOver(false)
+            onDragEnd()
+        },
+        [onDragEnd, index],
+    )
 
-    const handleDragOver = useCallback((e) => {
-        e.preventDefault()
-        e.dataTransfer.dropEffect = 'move'
-        setIsDragOver(true)
-        onDragOver(index)
-    }, [index, onDragOver])
+    const handleDragOver = useCallback(
+        (e) => {
+            e.preventDefault()
+            e.dataTransfer.dropEffect = 'move'
+            setIsDragOver(true)
+            onDragOver(index)
+        },
+        [index, onDragOver],
+    )
 
     const handleDragLeave = useCallback((e) => {
         // Only set drag over to false if we're leaving the card entirely
@@ -43,11 +52,14 @@ export default function DraggableCusipCard({
         }
     }, [])
 
-    const handleDrop = useCallback((e) => {
-        e.preventDefault()
-        setIsDragOver(false)
-        onDrop(index)
-    }, [index, onDrop])
+    const handleDrop = useCallback(
+        (e) => {
+            e.preventDefault()
+            setIsDragOver(false)
+            onDrop(index)
+        },
+        [index, onDrop],
+    )
 
     // Only allow dragging when in "Manual" sort mode
     const isDraggable = sortBy === 'entry'
@@ -68,4 +80,4 @@ export default function DraggableCusipCard({
             {children}
         </div>
     )
-} 
+}

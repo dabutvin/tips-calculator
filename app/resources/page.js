@@ -34,9 +34,7 @@ export default function Resources() {
                     </section>
 
                     <section style={{ marginBottom: '40px' }}>
-                        <h2 style={{ color: '#222', marginBottom: '20px' }}>
-                            Sample TIPS CUSIPs
-                        </h2>
+                        <h2 style={{ color: '#222', marginBottom: '20px' }}>Sample TIPS CUSIPs</h2>
                         <p style={{ marginBottom: '15px' }}>
                             Don't have a CUSIP handy? Try these sample TIPS CUSIPs in the calculator
                             to see how it works:
@@ -104,9 +102,7 @@ export default function Resources() {
                     </section>
 
                     <section style={{ marginBottom: '40px' }}>
-                        <h2 style={{ color: '#222', marginBottom: '20px' }}>
-                            Helpful Resources
-                        </h2>
+                        <h2 style={{ color: '#222', marginBottom: '20px' }}>Helpful Resources</h2>
 
                         <div style={{ display: 'grid', gap: '20px' }}>
                             <div

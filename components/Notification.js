@@ -19,6 +19,7 @@ export default function Notification({ notification }) {
 
     const typeStyles = {
         error: { backgroundColor: '#dc3545' },
+        success: { backgroundColor: '#28a745' },
     }
 
     return <div style={{ ...styles, ...typeStyles[notification.type] }}>{notification.message}</div>

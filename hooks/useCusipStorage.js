@@ -46,68 +46,80 @@ export function useCusipStorage() {
     }, [])
 
     // Add a new CUSIP
-    const addCusip = useCallback((newCusip) => {
-        // Update local state
-        setCusips(prev => [...prev, newCusip])
+    const addCusip = useCallback(
+        (newCusip) => {
+            // Update local state
+            setCusips((prev) => [...prev, newCusip])
 
-        // Save to localStorage if available
-        if (storageAvailable) {
-            const result = addCusipToStorage(newCusip)
-            if (!result.success) {
-                console.error('Failed to save CUSIP to localStorage:', result.error)
-                setError('Failed to save CUSIP')
-                return false
-            }
-        }
-
-        return true
-    }, [storageAvailable])
-
-    // Remove a CUSIP
-    const removeCusip = useCallback((cusipId) => {
-        // Update local state
-        setCusips(prev => prev.filter((cusip) => cusip.cusipId !== cusipId))
-
-        // Remove from localStorage if available
-        if (storageAvailable) {
-            const result = removeCusipFromStorage(cusipId)
-            if (!result.success) {
-                console.error('Failed to remove CUSIP from localStorage:', result.error)
-                setError('Failed to remove CUSIP')
-                return false
-            }
-        }
-
-        return true
-    }, [storageAvailable])
-
-    // Reorder CUSIPs (for drag and drop)
-    const reorderCusips = useCallback((fromIndex, toIndex) => {
-        setCusips(prev => {
-            const newCusips = [...prev]
-            const [movedCusip] = newCusips.splice(fromIndex, 1)
-            newCusips.splice(toIndex, 0, movedCusip)
-            return newCusips
-        })
-
-        // Save to localStorage if available
-        if (storageAvailable) {
-            const currentData = loadCusipsFromStorage()
-            if (currentData.success) {
-                const newCusips = [...currentData.data]
-                const [movedCusip] = newCusips.splice(fromIndex, 1)
-                newCusips.splice(toIndex, 0, movedCusip)
-                const result = saveCusipsToStorage(newCusips)
+            // Save to localStorage if available
+            if (storageAvailable) {
+                const result = addCusipToStorage(newCusip)
                 if (!result.success) {
-                    console.error('Failed to save reordered CUSIPs to localStorage:', result.error)
-                    setError('Failed to save reordered CUSIPs')
+                    console.error('Failed to save CUSIP to localStorage:', result.error)
+                    setError('Failed to save CUSIP')
                     return false
                 }
             }
-        }
 
-        return true
-    }, [storageAvailable])
+            return true
+        },
+        [storageAvailable],
+    )
+
+    // Remove a CUSIP
+    const removeCusip = useCallback(
+        (cusipId) => {
+            // Update local state
+            setCusips((prev) => prev.filter((cusip) => cusip.cusipId !== cusipId))
+
+            // Remove from localStorage if available
+            if (storageAvailable) {
+                const result = removeCusipFromStorage(cusipId)
+                if (!result.success) {
+                    console.error('Failed to remove CUSIP from localStorage:', result.error)
+                    setError('Failed to remove CUSIP')
+                    return false
+                }
+            }
+
+            return true
+        },
+        [storageAvailable],
+    )
+
+    // Reorder CUSIPs (for drag and drop)
+    const reorderCusips = useCallback(
+        (fromIndex, toIndex) => {
+            setCusips((prev) => {
+                const newCusips = [...prev]
+                const [movedCusip] = newCusips.splice(fromIndex, 1)
+                newCusips.splice(toIndex, 0, movedCusip)
+                return newCusips
+            })
+
+            // Save to localStorage if available
+            if (storageAvailable) {
+                const currentData = loadCusipsFromStorage()
+                if (currentData.success) {
+                    const newCusips = [...currentData.data]
+                    const [movedCusip] = newCusips.splice(fromIndex, 1)
+                    newCusips.splice(toIndex, 0, movedCusip)
+                    const result = saveCusipsToStorage(newCusips)
+                    if (!result.success) {
+                        console.error(
+                            'Failed to save reordered CUSIPs to localStorage:',
+                            result.error,
+                        )
+                        setError('Failed to save reordered CUSIPs')
+                        return false
+                    }
+                }
+            }
+
+            return true
+        },
+        [storageAvailable],
+    )
 
     // Clear error
     const clearError = useCallback(() => {
@@ -123,6 +135,6 @@ export function useCusipStorage() {
         addCusip,
         removeCusip,
         reorderCusips,
-        clearError
+        clearError,
     }
-} 
+}
