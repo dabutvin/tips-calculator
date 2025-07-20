@@ -1,5 +1,6 @@
 .cusipDetails {
     padding: 10px 20px;
+    font-size: 14px;
 }
 
 .cusipDetails.matured {
@@ -9,6 +10,7 @@
 
 .cusipDetails table td:nth-child(2) {
     font-weight: 600;
+    padding-left: 20px;
 }
 
 .collapsedView {
@@ -134,7 +136,8 @@
 
 .cpiEntries {
     max-height: 200px;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .cpiEntries .current {
@@ -142,7 +145,24 @@
 }
 
 .tableContainer {
-    overflow: hidden;
+    overflow: visible;
+}
+
+.cpiEntries table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cpiEntries thead th {
+    position: sticky;
+    top: -2px;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 10px 12px 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    z-index: 10;
 }
 
 .chartContainer {

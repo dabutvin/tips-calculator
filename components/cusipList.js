@@ -226,7 +226,6 @@ export default function CusipList() {
                     <MemoizedCusipDetails
                         cusip={cusipId}
                         originalPrincipal={originalPrincipal}
-                        collapsed={getCollapsedState(uniqueId)}
                         onToggle={createToggleCallback(uniqueId)}
                         isCollapsed={getCollapsedState(uniqueId)}
                         onRemove={createRemoveCallback(uniqueId)}

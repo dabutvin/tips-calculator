@@ -33,9 +33,8 @@ const getCurrentOrFinalEntry = (cpiEntries, isMature) => {
 export default function CusipDetails({
     cusip,
     originalPrincipal,
-    collapsed = false,
+    isCollapsed = true,
     onToggle,
-    isCollapsed,
     onRemove,
     onDataUpdate,
     uniqueId,
@@ -160,7 +159,7 @@ export default function CusipDetails({
     }
 
     // Collapsed view - show only essential fields horizontally
-    if (collapsed) {
+    if (isCollapsed) {
         return (
             <div className={`${styles.cusipDetails} ${isMature ? styles.matured : ''}`}>
                 <div className={styles.collapsedView}>
@@ -300,33 +299,36 @@ export default function CusipDetails({
             )}
 
             {cpiEntries && (
-                <div className={styles.cpiEntries}>
-                    <div className={styles.tableContainer}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Index Ratio</th>
-                                    <th>Daily Adjusted Principal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {cpiEntries?.map((entry) => (
-                                    <tr
-                                        key={entry.uniqueKey}
-                                        className={
-                                            entry.dailyIndex == currentCpiEntry?.dailyIndex
-                                                ? styles.current
-                                                : ''
-                                        }
-                                    >
-                                        <td>{new Date(entry.indexDate).toLocaleDateString()}</td>
-                                        <td>{entry.dailyIndex}</td>
-                                        <td>{`$${Number(entry.dailyIndex * originalPrincipal).toFixed(2)}`}</td>
+                <div>
+                    <h3>Index Ratio History</h3>
+                    <div className={styles.cpiEntries}>
+                        <div className={styles.tableContainer}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Index Ratio</th>
+                                        <th>Daily Adjusted Principal</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {cpiEntries?.map((entry) => (
+                                        <tr
+                                            key={entry.uniqueKey}
+                                            className={
+                                                entry.dailyIndex == currentCpiEntry?.dailyIndex
+                                                    ? styles.current
+                                                    : ''
+                                            }
+                                        >
+                                            <td>{new Date(entry.indexDate).toLocaleDateString()}</td>
+                                            <td>{entry.dailyIndex}</td>
+                                            <td>{`$${Number(entry.dailyIndex * originalPrincipal).toFixed(2)}`}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             )}
