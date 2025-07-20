@@ -136,7 +136,7 @@
     color: #222;
     border: none;
     border-radius: 6px;
-    padding: 4px 10px;
+    margin-right: 3px;
     font-size: 1.1rem;
     cursor: pointer;
     transition: color 0.2s;
