@@ -96,6 +96,11 @@ export default function CusipDetails({
     if (error) {
         return (
             <div className={styles.cusipDetails}>
+                <div className={styles.expandedHeaderError}>
+                    <button onClick={onRemove} className={styles.expandedRemoveBtn}>
+                        X
+                    </button>
+                </div>
                 <div
                     style={{
                         color: '#dc3545',

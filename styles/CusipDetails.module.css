@@ -73,6 +73,13 @@
     margin-bottom: 0.5rem;
 }
 
+.expandedHeaderError {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
 .expandedToggleBtn {
     background: transparent;
     color: #0070f3;
