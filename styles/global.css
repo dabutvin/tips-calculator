@@ -35,10 +35,10 @@ img {
 
 /* Consistent h3 styling across browsers */
 h3 {
-    font-size: 1.25rem; /* 20px */
-    font-weight: 600;
+    font-size: .8rem;
+    text-transform: uppercase;
+    font-weight: 500;
     line-height: 1.4;
     margin: 1.5rem 0 0.75rem 0;
-    color: inherit;
-    font-family: inherit;
+    color: #666;
 }

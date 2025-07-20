@@ -8,10 +8,14 @@
     border-radius: 12px;
 }
 
-.cusipDetails table td:nth-child(2) {
-    font-weight: 600;
+.cusipDetails table td {
     padding-left: 20px;
 }
+
+.cusipDetails table td:nth-child(2) {
+    font-weight: 600;
+}
+
 
 .collapsedView {
     display: flex;
@@ -80,6 +84,14 @@
     margin-bottom: 0.5rem;
 }
 
+.expandedHeaderWithContent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    margin-bottom: 1.5rem;
+}
+
 .expandedHeaderError {
     display: flex;
     justify-content: flex-end;
@@ -134,6 +146,21 @@
     color: #dc3545;
 }
 
+.retainedCollapsedView {
+    flex: 1;
+    padding: 0;
+    margin: 0 0 0 9px;
+}
+
+.retainedCollapsedView .collapsedContent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    flex: 1;
+}
+
 .cpiEntries {
     max-height: 200px;
     overflow-y: auto;
@@ -158,10 +185,12 @@
     top: -2px;
     background-color: #f8f9fa;
     border-bottom: 2px solid #dee2e6;
-    padding: 10px 12px 8px 12px;
+    padding: 10px 0 8px 20px;
     text-align: left;
-    font-weight: 600;
-    color: #495057;
+    font-size: .8rem;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #666;
     z-index: 10;
 }
 
@@ -252,5 +281,63 @@
     .collapsedValue {
         font-size: 0.85rem;
         font-weight: 600;
+    }
+    
+    /* Mobile styles for inline header with content */
+    .expandedHeaderWithContent {
+        display: flex;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .expandedToggleBtn {
+        margin-right: 0;
+        font-size: 1.2rem;
+        padding: 8px;
+        min-width: 36px;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .expandedRemoveBtn {
+        font-size: 1.2rem;
+        padding: 8px;
+        min-width: 36px;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Mobile styles for retained collapsed view in expanded state */
+    .retainedCollapsedView {
+        flex: 1;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .retainedCollapsedView .collapsedContent {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        flex: 1;
+        overflow-x: visible;
+    }
+    
+    .retainedCollapsedView .collapsedMobileRowPrimary,
+    .retainedCollapsedView .collapsedMobileRowSecondary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    
+    /* Hide Rate field on mobile in retained view to save space */
+    .retainedCollapsedView .collapsedContent > .collapsedField:last-child {
+        display: none;
     }
 }

@@ -214,20 +214,58 @@ export default function CusipDetails({
     // Full expanded view
     return (
         <div className={`${styles.cusipDetails} ${isMature ? styles.matured : ''}`}>
-            <div className={styles.expandedHeader}>
+            {/* Inline header with buttons and retained collapsed content */}
+            <div className={styles.expandedHeaderWithContent}>
                 <button onClick={onToggle} className={styles.expandedToggleBtn}>
                     {isCollapsed ? '▶' : '▼'}
                 </button>
+                <div className={styles.retainedCollapsedView}>
+                    <div className={styles.collapsedContent}>
+                        <div className={styles.collapsedMobileRowPrimary}>
+                            <div className={styles.collapsedField}>
+                                <span className={styles.collapsedLabel}>CUSIP:</span>
+                                <span className={styles.collapsedValue}>{cusip}</span>
+                            </div>
+                            <div className={styles.collapsedField}>
+                                <span className={styles.collapsedLabel}>
+                                    {isMature ? 'Final:' : 'Current:'}
+                                </span>
+                                <span className={styles.collapsedValue}>
+                                    ${Number(adjustedPrincipal).toFixed(0)}
+                                </span>
+                            </div>
+                        </div>
+                        <div className={styles.collapsedMobileRowSecondary}>
+                            <div className={styles.collapsedField}>
+                                <span className={styles.collapsedLabel}>Original:</span>
+                                <span className={styles.collapsedValue}>${originalPrincipal}</span>
+                            </div>
+                            <div className={styles.collapsedField}>
+                                <span className={styles.collapsedLabel}>Maturity:</span>
+                                <span className={styles.collapsedValue}>
+                                    {securityDetails?.maturityDate
+                                        ? new Date(securityDetails.maturityDate).toLocaleDateString()
+                                        : 'N/A'}
+                                </span>
+                            </div>
+                        </div>
+                        {/* Hidden on mobile via CSS but shown on desktop */}
+                        <div className={styles.collapsedField}>
+                            <span className={styles.collapsedLabel}>Rate:</span>
+                            <span className={styles.collapsedValue}>
+                                {Number(securityDetails?.interestRate).toFixed(3)}%
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 <button onClick={onRemove} className={styles.expandedRemoveBtn}>
                     X
                 </button>
             </div>
+
+            <h3>Security Details</h3>
             <table>
                 <tbody>
-                    <tr>
-                        <td>CUSIP:</td>
-                        <td>{cusip}</td>
-                    </tr>
                     <tr>
                         <td>
                             {isMature ? 'Final Adjusted Principal:' : 'Current Adjusted Principal:'}
