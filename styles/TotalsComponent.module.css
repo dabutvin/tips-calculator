@@ -1,0 +1,29 @@
+.totalsContainer {
+    margin-top: 2rem;
+    width: 700px;
+    max-width: 100vw;
+}
+
+.totalsTitle {
+    margin: 0 0 1rem 0;
+}
+
+.totalsGrid {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.totalItem {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
+}

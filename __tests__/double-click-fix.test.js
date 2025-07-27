@@ -41,7 +41,7 @@ describe('Double-click toggle fix', () => {
         // Initially, allCollapsed is true and CUSIP doesn't exist in collapsedStates
         expect(result.current.allCollapsed).toBe(true)
         expect(result.current.collapsedStates[cusipId]).toBeUndefined()
-        
+
         // getCollapsedState should return true (fallback to allCollapsed)
         expect(result.current.getCollapsedState(cusipId)).toBe(true)
 
@@ -53,7 +53,7 @@ describe('Double-click toggle fix', () => {
 
         // After toggle, it should be expanded (false)
         expect(result.current.getCollapsedState(cusipId)).toBe(false)
-        
+
         // And it should now exist in collapsedStates
         expect(result.current.collapsedStates[cusipId]).toBe(false)
     })
@@ -73,11 +73,11 @@ describe('Double-click toggle fix', () => {
 
         // The fix ensures toggle uses the same fallback logic as getCollapsedState
         expect(result.current.getCollapsedState(cusipId)).toBe(true) // Uses fallback
-        
+
         act(() => {
             result.current.toggleIndividualCollapsed(cusipId)
         })
-        
+
         expect(result.current.getCollapsedState(cusipId)).toBe(false) // Now uses correct toggle
     })
 
@@ -87,7 +87,7 @@ describe('Double-click toggle fix', () => {
 
         // First, change allCollapsed to false by toggling all with some CUSIPs
         const mockCusips = [{ cusipId: 'MOCK1', uniqueId: 'mock1' }]
-        
+
         act(() => {
             result.current.toggleAllCollapsed(mockCusips)
         })
@@ -105,4 +105,4 @@ describe('Double-click toggle fix', () => {
 
         expect(result.current.getCollapsedState(cusipId)).toBe(true)
     })
-}) 
+})

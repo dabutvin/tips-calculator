@@ -23,8 +23,12 @@ export function useCusipSorting(cusips, cusipData, onReorder) {
                 if (!aValue) return sortDirection === 'asc' ? 1 : -1
                 if (!bValue) return sortDirection === 'asc' ? -1 : 1
             } else if (sortBy === 'adjusted') {
-                aValue = aData?.adjustedPrincipal ? Number(aData.adjustedPrincipal) : Number(a.originalPrincipal)
-                bValue = bData?.adjustedPrincipal ? Number(bData.adjustedPrincipal) : Number(b.originalPrincipal)
+                aValue = aData?.adjustedPrincipal
+                    ? Number(aData.adjustedPrincipal)
+                    : Number(a.originalPrincipal)
+                bValue = bData?.adjustedPrincipal
+                    ? Number(bData.adjustedPrincipal)
+                    : Number(b.originalPrincipal)
             } else if (sortBy === 'interest') {
                 aValue = aData?.interestRate || 0
                 bValue = bData?.interestRate || 0

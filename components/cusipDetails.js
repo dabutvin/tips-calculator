@@ -191,7 +191,9 @@ export default function CusipDetails({
                                 <span className={styles.collapsedLabel}>Maturity:</span>
                                 <span className={styles.collapsedValue}>
                                     {securityDetails?.maturityDate
-                                        ? new Date(securityDetails.maturityDate).toLocaleDateString()
+                                        ? new Date(
+                                              securityDetails.maturityDate,
+                                          ).toLocaleDateString()
                                         : 'N/A'}
                                 </span>
                             </div>
@@ -245,7 +247,9 @@ export default function CusipDetails({
                                 <span className={styles.collapsedLabel}>Maturity:</span>
                                 <span className={styles.collapsedValue}>
                                     {securityDetails?.maturityDate
-                                        ? new Date(securityDetails.maturityDate).toLocaleDateString()
+                                        ? new Date(
+                                              securityDetails.maturityDate,
+                                          ).toLocaleDateString()
                                         : 'N/A'}
                                 </span>
                             </div>
@@ -360,7 +364,9 @@ export default function CusipDetails({
                                                     : ''
                                             }
                                         >
-                                            <td>{new Date(entry.indexDate).toLocaleDateString()}</td>
+                                            <td>
+                                                {new Date(entry.indexDate).toLocaleDateString()}
+                                            </td>
                                             <td>{entry.dailyIndex}</td>
                                             <td>{`$${Number(entry.dailyIndex * originalPrincipal).toFixed(2)}`}</td>
                                         </tr>

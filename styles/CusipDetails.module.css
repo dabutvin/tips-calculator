@@ -16,7 +16,6 @@
     font-weight: 600;
 }
 
-
 .collapsedView {
     display: flex;
     align-items: center;
@@ -187,7 +186,7 @@
     border-bottom: 2px solid #dee2e6;
     padding: 10px 0 8px 20px;
     text-align: left;
-    font-size: .8rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
     font-weight: 500;
     color: #666;
@@ -282,7 +281,7 @@
         font-size: 0.85rem;
         font-weight: 600;
     }
-    
+
     /* Mobile styles for inline header with content */
     .expandedHeaderWithContent {
         display: flex;
@@ -291,7 +290,7 @@
         padding: 0;
         margin-bottom: 1rem;
     }
-    
+
     .expandedToggleBtn {
         margin-right: 0;
         font-size: 1.2rem;
@@ -302,7 +301,7 @@
         align-items: center;
         justify-content: center;
     }
-    
+
     .expandedRemoveBtn {
         font-size: 1.2rem;
         padding: 8px;
@@ -312,14 +311,14 @@
         align-items: center;
         justify-content: center;
     }
-    
+
     /* Mobile styles for retained collapsed view in expanded state */
     .retainedCollapsedView {
         flex: 1;
         padding: 0;
         margin: 0;
     }
-    
+
     .retainedCollapsedView .collapsedContent {
         display: flex;
         flex-direction: column;
@@ -327,7 +326,7 @@
         flex: 1;
         overflow-x: visible;
     }
-    
+
     .retainedCollapsedView .collapsedMobileRowPrimary,
     .retainedCollapsedView .collapsedMobileRowSecondary {
         display: flex;
@@ -335,7 +334,7 @@
         align-items: center;
         width: 100%;
     }
-    
+
     /* Hide Rate field on mobile in retained view to save space */
     .retainedCollapsedView .collapsedContent > .collapsedField:last-child {
         display: none;

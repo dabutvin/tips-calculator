@@ -8,6 +8,7 @@ import SortControl from '../components/SortControl'
 import ConfirmationDialog from '../components/ConfirmationDialog'
 import DraggableCusipCard from '../components/DraggableCusipCard'
 import Tooltip from '../components/Tooltip'
+import TotalsComponent from '../components/TotalsComponent'
 import styles from '../styles/CusipList.module.css'
 import { useCusipSorting } from '../hooks/useCusipSorting'
 import { useCusipStorage } from '../hooks/useCusipStorage'
@@ -252,6 +253,8 @@ export default function CusipList() {
                 onConfirm={handleClearAllData}
                 onCancel={handleCancelClear}
             />
+
+            <TotalsComponent cusipData={cusipData} />
         </div>
     )
 }

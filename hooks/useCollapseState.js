@@ -32,14 +32,17 @@ export function useCollapseState(initialCusips = []) {
     )
 
     // Toggle individual collapsed state
-    const toggleIndividualCollapsed = useCallback((cusipId) => {
-        const currentState = collapsedStates[cusipId] ?? allCollapsed
-        const newState = !currentState
-        setCollapsedStates((prev) => ({
-            ...prev,
-            [cusipId]: newState,
-        }))
-    }, [collapsedStates, allCollapsed])
+    const toggleIndividualCollapsed = useCallback(
+        (cusipId) => {
+            const currentState = collapsedStates[cusipId] ?? allCollapsed
+            const newState = !currentState
+            setCollapsedStates((prev) => ({
+                ...prev,
+                [cusipId]: newState,
+            }))
+        },
+        [collapsedStates, allCollapsed],
+    )
 
     // Add collapsed state for new CUSIP
     const addCollapsedState = useCallback(
