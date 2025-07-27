@@ -1,6 +1,11 @@
 # TIPS (Treasury Inflation-Protected Securities) Calculator
 
-A Next.js application for looking up TIPS information and calculating adjusted principal values using Treasury Direct APIs.
+A Next.js application for looking up TIPS information and calculating adjusted principal values using Treasury Direct APIs. 
+This application deploys automatically to Netlify from the main branch.
+
+Live Calculator: https://tips-calculator.com/
+
+![Calculator](calculator.png)
 
 ## Background
 
