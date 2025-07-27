@@ -27,3 +27,9 @@
 .negative {
     color: red;
 }
+
+@media (max-width: 600px) {
+    .totalsContainer {
+        padding: 0 20px;
+    }
+}

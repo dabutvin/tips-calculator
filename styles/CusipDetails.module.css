@@ -212,6 +212,10 @@
         padding: 12px 16px;
     }
 
+    .cusipDetails.matured {
+        background-color: transparent;
+    }
+
     .collapsedView {
         display: flex;
         align-items: stretch;
