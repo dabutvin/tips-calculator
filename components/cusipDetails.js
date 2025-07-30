@@ -173,7 +173,7 @@ export default function CusipDetails({
                             </div>
                             <div className={styles.collapsedField}>
                                 <span className={styles.collapsedLabel}>
-                                    {isMature ? 'Final:' : 'Current:'}
+                                    {isMature ? 'Mature:' : 'Current:'}
                                 </span>
                                 <span className={styles.collapsedValue}>
                                     ${Number(adjustedPrincipal).toFixed(0)}
@@ -229,7 +229,7 @@ export default function CusipDetails({
                             </div>
                             <div className={styles.collapsedField}>
                                 <span className={styles.collapsedLabel}>
-                                    {isMature ? 'Final:' : 'Current:'}
+                                    {isMature ? 'Mature:' : 'Current:'}
                                 </span>
                                 <span className={styles.collapsedValue}>
                                     ${Number(adjustedPrincipal).toFixed(0)}

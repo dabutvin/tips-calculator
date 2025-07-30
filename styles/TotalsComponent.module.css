@@ -6,11 +6,12 @@
 
 .totalsTitle {
     margin: 0 0 1rem 0;
+    font-size: 1.1rem;
 }
 
 .totalsGrid {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 1rem;
     flex-wrap: wrap;
 }
@@ -18,14 +19,18 @@
 .totalItem {
     display: flex;
     gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.positive {
-    color: green;
-}
-
-.negative {
-    color: red;
+.totalItem .value {
+    font-size: 0.9rem;
+    color: #222;
+    font-weight: 600;
+    line-height: 1;
 }
 
 @media (max-width: 600px) {
