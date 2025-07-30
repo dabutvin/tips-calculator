@@ -55,17 +55,27 @@ export default function CusipDetails({
                 setIsLoading(true)
 
                 let cpiEntriesResponse = await getCpiEntries(cusip)
-                setCpiEntries(cpiEntriesResponse)
+                if (cpiEntriesResponse.error) {
+                    setError(cpiEntriesResponse.error)
+                    return
+                }
+                const cpiEntries = cpiEntriesResponse.data
+                setCpiEntries(cpiEntries)
 
                 let securityDetailsResponse = await getSecurityDetails(cusip)
-                setSecurityDetails(securityDetailsResponse)
+                if (securityDetailsResponse.error) {
+                    setError(securityDetailsResponse.error)
+                    return
+                }
+                const securityDetails = securityDetailsResponse.data
+                setSecurityDetails(securityDetails)
 
                 // Detect if security is mature
-                const securityIsMature = isSecurityMature(securityDetailsResponse?.maturityDate)
+                const securityIsMature = isSecurityMature(securityDetails?.maturityDate)
                 setIsMature(securityIsMature)
 
                 // Get appropriate CPI entry (current for active, final for mature)
-                let relevantEntry = getCurrentOrFinalEntry(cpiEntriesResponse, securityIsMature)
+                let relevantEntry = getCurrentOrFinalEntry(cpiEntries, securityIsMature)
                 setCurrentCpiEntry(relevantEntry)
 
                 const adjustedPrincipalValue = (relevantEntry?.dailyIndex * faceValue).toFixed(2)
@@ -75,17 +85,17 @@ export default function CusipDetails({
                 if (onDataUpdate) {
                     onDataUpdate({
                         cusipId: cusip,
-                        maturityDate: securityDetailsResponse?.maturityDate,
+                        maturityDate: securityDetails?.maturityDate,
                         adjustedPrincipal: parseFloat(adjustedPrincipalValue),
                         faceValue: parseFloat(faceValue),
-                        interestRate: parseFloat(securityDetailsResponse?.interestRate),
+                        interestRate: parseFloat(securityDetails?.interestRate),
                         isMature: securityIsMature,
                         uniqueId: uniqueId,
                     })
                 }
 
                 setCpiChartData(
-                    cpiEntriesResponse
+                    cpiEntries
                         .map((entry) => {
                             return {
                                 indexDate: new Date(entry.indexDate).toLocaleDateString(),

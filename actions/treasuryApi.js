@@ -23,17 +23,19 @@ export async function getCpiEntries(cusip) {
 
     // Handle empty response (invalid CUSIP)
     if (!data || data.length === 0) {
-        throw new Error(`No CPI data found for CUSIP: ${cusip}`)
+        return { error: `No CPI data found for CUSIP: ${cusip}` }
     }
 
-    return data.map((entry) => {
-        return {
-            uniqueKey: `${entry.cusip}_${entry.indexDate}_${entry.updateTimeStamp}`,
-            dailyIndex: entry.dailyIndex,
-            indexDate: entry.indexDate,
-            updateTimeStamp: entry.updateTimeStamp,
-        }
-    })
+    return {
+        data: data.map((entry) => {
+            return {
+                uniqueKey: `${entry.cusip}_${entry.indexDate}_${entry.updateTimeStamp}`,
+                dailyIndex: entry.dailyIndex,
+                indexDate: entry.indexDate,
+                updateTimeStamp: entry.updateTimeStamp,
+            }
+        }),
+    }
 }
 
 /*
@@ -166,8 +168,8 @@ export async function getSecurityDetails(cusip) {
 
     // Handle empty response (invalid CUSIP)
     if (!data || data.length === 0) {
-        throw new Error(`No security details found for CUSIP: ${cusip}`)
+        return { error: `No security details found for CUSIP: ${cusip}` }
     }
 
-    return data.pop() // take the last item in the list, re-issues are further up
+    return { data: data.pop() } // take the last item in the list, re-issues are further up
 }
