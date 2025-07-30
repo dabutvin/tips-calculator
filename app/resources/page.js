@@ -172,8 +172,8 @@ export default function Resources() {
                                     </a>
                                 </h3>
                                 <p style={{ margin: '0', color: '#666' }}>
-                                    Comprehensive TIPS data and analytics platform with real-time
-                                    pricing and yield information.
+                                    Resources and information about bonds including historical data
+                                    on TIPS.
                                 </p>
                             </div>
 
