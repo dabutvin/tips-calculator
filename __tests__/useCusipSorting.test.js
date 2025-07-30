@@ -8,17 +8,17 @@ describe('useCusipSorting', () => {
     const mockCusips = [
         {
             cusipId: 'CUSIP001',
-            originalPrincipal: 1000,
+            faceValue: 1000,
             uniqueId: 'unique1',
         },
         {
             cusipId: 'CUSIP002',
-            originalPrincipal: 2000,
+            faceValue: 2000,
             uniqueId: 'unique2',
         },
         {
             cusipId: 'CUSIP003',
-            originalPrincipal: 1500,
+            faceValue: 1500,
             uniqueId: 'unique3',
         },
     ]
@@ -28,19 +28,19 @@ describe('useCusipSorting', () => {
             maturityDate: '2025-01-15T00:00:00',
             adjustedPrincipal: 1200,
             interestRate: 2.5,
-            originalPrincipal: 1000,
+            faceValue: 1000,
         },
         unique2: {
             maturityDate: '2024-06-15T00:00:00',
             adjustedPrincipal: 2100,
             interestRate: 1.8,
-            originalPrincipal: 2000,
+            faceValue: 2000,
         },
         unique3: {
             maturityDate: '2026-12-15T00:00:00',
             adjustedPrincipal: 1600,
             interestRate: 3.2,
-            originalPrincipal: 1500,
+            faceValue: 1500,
         },
     }
 
@@ -199,20 +199,20 @@ describe('useCusipSorting', () => {
             result.current.handleSortChange('adjusted', 'asc')
         })
 
-        // Should not crash and should use originalPrincipal as fallback
+        // Should not crash and should use faceValue as fallback
         expect(result.current.sortedCusips).toHaveLength(3)
     })
 
-    test('uses originalPrincipal as fallback when adjustedPrincipal is missing', () => {
+    test('uses faceValue as fallback when adjustedPrincipal is missing', () => {
         const testCusips = [
             {
                 cusipId: 'CUSIP001',
-                originalPrincipal: 1000,
+                faceValue: 1000,
                 uniqueId: 'unique1',
             },
             {
                 cusipId: 'CUSIP002',
-                originalPrincipal: 2000,
+                faceValue: 2000,
                 uniqueId: 'unique2',
             },
         ]
@@ -221,14 +221,14 @@ describe('useCusipSorting', () => {
             unique1: {
                 maturityDate: '2025-01-15T00:00:00',
                 interestRate: 2.5,
-                originalPrincipal: 1000,
-                // adjustedPrincipal missing - will use originalPrincipal: 1000
+                faceValue: 1000,
+                // adjustedPrincipal missing - will use faceValue: 1000
             },
             unique2: {
                 maturityDate: '2024-06-15T00:00:00',
                 adjustedPrincipal: 2100,
                 interestRate: 1.8,
-                originalPrincipal: 2000,
+                faceValue: 2000,
             },
         }
 
@@ -241,7 +241,7 @@ describe('useCusipSorting', () => {
         })
 
         const sortedCusips = result.current.sortedCusips
-        expect(sortedCusips[0].cusipId).toBe('CUSIP001') // originalPrincipal: 1000 (fallback)
+        expect(sortedCusips[0].cusipId).toBe('CUSIP001') // faceValue: 1000 (fallback)
         expect(sortedCusips[1].cusipId).toBe('CUSIP002') // adjustedPrincipal: 2100
     })
 
@@ -249,12 +249,12 @@ describe('useCusipSorting', () => {
         const testCusips = [
             {
                 cusipId: 'CUSIP001',
-                originalPrincipal: 1000,
+                faceValue: 1000,
                 uniqueId: 'unique1',
             },
             {
                 cusipId: 'CUSIP002',
-                originalPrincipal: 2000,
+                faceValue: 2000,
                 uniqueId: 'unique2',
             },
         ]
@@ -263,14 +263,14 @@ describe('useCusipSorting', () => {
             unique1: {
                 maturityDate: '2025-01-15T00:00:00',
                 adjustedPrincipal: 1200,
-                originalPrincipal: 1000,
+                faceValue: 1000,
                 // interestRate missing - will default to 0
             },
             unique2: {
                 maturityDate: '2024-06-15T00:00:00',
                 adjustedPrincipal: 2100,
                 interestRate: 1.8,
-                originalPrincipal: 2000,
+                faceValue: 2000,
             },
         }
 
@@ -334,9 +334,9 @@ describe('useCusipSorting', () => {
 
     test('sorting is stable with equal values', () => {
         const cusipsWithEqualValues = [
-            { cusipId: 'CUSIP001', originalPrincipal: 1000, uniqueId: 'unique1' },
-            { cusipId: 'CUSIP002', originalPrincipal: 1000, uniqueId: 'unique2' },
-            { cusipId: 'CUSIP003', originalPrincipal: 1000, uniqueId: 'unique3' },
+            { cusipId: 'CUSIP001', faceValue: 1000, uniqueId: 'unique1' },
+            { cusipId: 'CUSIP002', faceValue: 1000, uniqueId: 'unique2' },
+            { cusipId: 'CUSIP003', faceValue: 1000, uniqueId: 'unique3' },
         ]
 
         const cusipDataWithEqualInterest = {
@@ -403,49 +403,49 @@ describe('useCusipSorting', () => {
         const realCusipData = [
             {
                 cusipId: '912810RW0',
-                originalPrincipal: '5000',
+                faceValue: '5000',
                 uniqueId: '912810RW0-1753042533814-458s7zb1n',
                 addedAt: '2025-07-20T20:15:33.814Z',
                 lastUpdated: '2025-07-20T20:42:44.103Z',
             },
             {
                 cusipId: '912810SB5',
-                originalPrincipal: '5000',
+                faceValue: '5000',
                 uniqueId: '912810SB5-1753042539613-pv0lm9cfq',
                 addedAt: '2025-07-20T20:15:39.614Z',
                 lastUpdated: '2025-07-20T20:42:44.103Z',
             },
             {
                 cusipId: '91282CJY8',
-                originalPrincipal: '5000',
+                faceValue: '5000',
                 uniqueId: '91282CJY8-1753042203970-t4w6xmj9e',
                 addedAt: '2025-07-20T20:10:03.971Z',
                 lastUpdated: '2025-07-20T20:42:44.103Z',
             },
             {
                 cusipId: '912810SB5',
-                originalPrincipal: '6000',
+                faceValue: '6000',
                 uniqueId: '912810SB5-1753042718263-s5ddnuef8',
                 addedAt: '2025-07-20T20:18:38.264Z',
                 lastUpdated: '2025-07-20T20:42:44.103Z',
             },
             {
                 cusipId: '912810SB5',
-                originalPrincipal: '2000',
+                faceValue: '2000',
                 uniqueId: '912810SB5-1753042723807-6qv0r0vbe',
                 addedAt: '2025-07-20T20:18:43.807Z',
                 lastUpdated: '2025-07-20T20:42:44.103Z',
             },
             {
                 cusipId: '912810SV1',
-                originalPrincipal: '5000',
+                faceValue: '5000',
                 uniqueId: '912810SV1-1753042545725-i0h7blo6w',
                 addedAt: '2025-07-20T20:15:45.725Z',
                 lastUpdated: '2025-07-20T20:42:44.103Z',
             },
         ]
 
-        // Empty cusipData means sorting will fall back to originalPrincipal strings
+        // Empty cusipData means sorting will fall back to faceValue strings
         const emptyCusipData = {}
 
         const { result } = renderHook(() =>
@@ -459,24 +459,24 @@ describe('useCusipSorting', () => {
         const sortedCusips = result.current.sortedCusips
 
         // Expected order by NUMERICAL value (should be 2000, then 5000s, then 6000)
-        expect(sortedCusips[0].originalPrincipal).toBe('2000') // Should be first (lowest)
-        expect(sortedCusips[sortedCusips.length - 1].originalPrincipal).toBe('6000') // Should be last (highest)
+        expect(sortedCusips[0].faceValue).toBe('2000') // Should be first (lowest)
+        expect(sortedCusips[sortedCusips.length - 1].faceValue).toBe('6000') // Should be last (highest)
 
         // Additional verification - all values between first and last should be "5000"
         for (let i = 1; i < sortedCusips.length - 1; i++) {
-            expect(sortedCusips[i].originalPrincipal).toBe('5000')
+            expect(sortedCusips[i].faceValue).toBe('5000')
         }
     })
 
     test('exposes string vs number sorting issue with problematic values', () => {
         // This test will fail if string sorting is used instead of numeric sorting
         const problematicCusips = [
-            { cusipId: 'CUSIP001', originalPrincipal: '10000', uniqueId: 'unique1' }, // String "10000"
-            { cusipId: 'CUSIP002', originalPrincipal: '2000', uniqueId: 'unique2' }, // String "2000"
-            { cusipId: 'CUSIP003', originalPrincipal: '9000', uniqueId: 'unique3' }, // String "9000"
+            { cusipId: 'CUSIP001', faceValue: '10000', uniqueId: 'unique1' }, // String "10000"
+            { cusipId: 'CUSIP002', faceValue: '2000', uniqueId: 'unique2' }, // String "2000"
+            { cusipId: 'CUSIP003', faceValue: '9000', uniqueId: 'unique3' }, // String "9000"
         ]
 
-        // No cusipData, so it falls back to originalPrincipal strings
+        // No cusipData, so it falls back to faceValue strings
         const emptyCusipData = {}
 
         const { result } = renderHook(() =>
@@ -491,20 +491,20 @@ describe('useCusipSorting', () => {
 
         // Numerical order should be: 2000, 9000, 10000
         // But STRING order would be: 10000, 2000, 9000 (because "1" < "2" < "9")
-        expect(sortedCusips[0].originalPrincipal).toBe('2000') // Should be first numerically
-        expect(sortedCusips[1].originalPrincipal).toBe('9000') // Should be second numerically
-        expect(sortedCusips[2].originalPrincipal).toBe('10000') // Should be last numerically
+        expect(sortedCusips[0].faceValue).toBe('2000') // Should be first numerically
+        expect(sortedCusips[1].faceValue).toBe('9000') // Should be second numerically
+        expect(sortedCusips[2].faceValue).toBe('10000') // Should be last numerically
 
-        // This test will FAIL if sorting treats originalPrincipal as strings
+        // This test will FAIL if sorting treats faceValue as strings
     })
 
     test('handles duplicate CUSIPs with different adjusted principals', () => {
         // Scenario: Same CUSIP added multiple times with different original amounts
         const duplicateCusips = [
-            { cusipId: '912810SB5', originalPrincipal: '5000', uniqueId: '912810SB5-first' },
-            { cusipId: '912810SB5', originalPrincipal: '6000', uniqueId: '912810SB5-second' },
-            { cusipId: '912810SB5', originalPrincipal: '2000', uniqueId: '912810SB5-third' },
-            { cusipId: '912810RW0', originalPrincipal: '3000', uniqueId: '912810RW0-single' },
+            { cusipId: '912810SB5', faceValue: '5000', uniqueId: '912810SB5-first' },
+            { cusipId: '912810SB5', faceValue: '6000', uniqueId: '912810SB5-second' },
+            { cusipId: '912810SB5', faceValue: '2000', uniqueId: '912810SB5-third' },
+            { cusipId: '912810RW0', faceValue: '3000', uniqueId: '912810RW0-single' },
         ]
 
         // Each instance has different adjusted principal values
@@ -513,25 +513,25 @@ describe('useCusipSorting', () => {
                 maturityDate: '2025-01-15T00:00:00',
                 adjustedPrincipal: 5500,
                 interestRate: 2.5,
-                originalPrincipal: 5000,
+                faceValue: 5000,
             },
             '912810SB5-second': {
                 maturityDate: '2025-01-15T00:00:00',
                 adjustedPrincipal: 6600, // Different adjusted principal based on different original
                 interestRate: 2.5,
-                originalPrincipal: 6000,
+                faceValue: 6000,
             },
             '912810SB5-third': {
                 maturityDate: '2025-01-15T00:00:00',
                 adjustedPrincipal: 2200, // Different adjusted principal based on different original
                 interestRate: 2.5,
-                originalPrincipal: 2000,
+                faceValue: 2000,
             },
             '912810RW0-single': {
                 maturityDate: '2024-06-15T00:00:00',
                 adjustedPrincipal: 3200,
                 interestRate: 1.8,
-                originalPrincipal: 3000,
+                faceValue: 3000,
             },
         }
 
@@ -562,15 +562,15 @@ describe('useCusipSorting', () => {
         expect(uniqueIds).toContain('912810SB5-third')
     })
 
-    test('handles duplicate CUSIPs falling back to different originalPrincipal values', () => {
+    test('handles duplicate CUSIPs falling back to different faceValue values', () => {
         // Scenario: Same CUSIP multiple times, but no adjusted principal data available
         const duplicateCusips = [
-            { cusipId: '912810SB5', originalPrincipal: '8000', uniqueId: '912810SB5-large' },
-            { cusipId: '912810SB5', originalPrincipal: '1000', uniqueId: '912810SB5-small' },
-            { cusipId: '912810SB5', originalPrincipal: '5000', uniqueId: '912810SB5-medium' },
+            { cusipId: '912810SB5', faceValue: '8000', uniqueId: '912810SB5-large' },
+            { cusipId: '912810SB5', faceValue: '1000', uniqueId: '912810SB5-small' },
+            { cusipId: '912810SB5', faceValue: '5000', uniqueId: '912810SB5-medium' },
         ]
 
-        // No cusipData available, so sorting falls back to originalPrincipal
+        // No cusipData available, so sorting falls back to faceValue
         const emptyCusipData = {}
 
         const { result } = renderHook(() =>
@@ -583,14 +583,14 @@ describe('useCusipSorting', () => {
 
         const sortedCusips = result.current.sortedCusips
 
-        // Should be sorted by originalPrincipal: 1000, 5000, 8000
-        expect(sortedCusips[0].originalPrincipal).toBe('1000')
+        // Should be sorted by faceValue: 1000, 5000, 8000
+        expect(sortedCusips[0].faceValue).toBe('1000')
         expect(sortedCusips[0].uniqueId).toBe('912810SB5-small')
 
-        expect(sortedCusips[1].originalPrincipal).toBe('5000')
+        expect(sortedCusips[1].faceValue).toBe('5000')
         expect(sortedCusips[1].uniqueId).toBe('912810SB5-medium')
 
-        expect(sortedCusips[2].originalPrincipal).toBe('8000')
+        expect(sortedCusips[2].faceValue).toBe('8000')
         expect(sortedCusips[2].uniqueId).toBe('912810SB5-large')
 
         // All should have the same CUSIP ID
@@ -604,22 +604,22 @@ describe('useCusipSorting', () => {
         const duplicateCusips = [
             {
                 cusipId: '912810SB5',
-                originalPrincipal: '1000',
+                faceValue: '1000',
                 uniqueId: '912810SB5-1753042539613-pv0lm9cfq',
             },
             {
                 cusipId: '912810SB5',
-                originalPrincipal: '6000',
+                faceValue: '6000',
                 uniqueId: '912810SB5-1753042718263-s5ddnuef8',
             },
             {
                 cusipId: '912810SB5',
-                originalPrincipal: '2000',
+                faceValue: '2000',
                 uniqueId: '912810SB5-1753042723807-6qv0r0vbe',
             },
         ]
 
-        // Each instance should have its own adjusted principal based on its own originalPrincipal
+        // Each instance should have its own adjusted principal based on its own faceValue
         // But currently cusipData is keyed by cusipId, not uniqueId
         const cusipDataKeyedByUniqueId = {
             // These should be keyed by uniqueId, not cusipId
@@ -627,19 +627,19 @@ describe('useCusipSorting', () => {
                 maturityDate: '2025-01-15T00:00:00',
                 adjustedPrincipal: 1100, // 1000 * 1.1 = 1100
                 interestRate: 2.5,
-                originalPrincipal: 1000,
+                faceValue: 1000,
             },
             '912810SB5-1753042718263-s5ddnuef8': {
                 maturityDate: '2025-01-15T00:00:00',
                 adjustedPrincipal: 6600, // 6000 * 1.1 = 6600
                 interestRate: 2.5,
-                originalPrincipal: 6000,
+                faceValue: 6000,
             },
             '912810SB5-1753042723807-6qv0r0vbe': {
                 maturityDate: '2025-01-15T00:00:00',
                 adjustedPrincipal: 2200, // 2000 * 1.1 = 2200
                 interestRate: 2.5,
-                originalPrincipal: 2000,
+                faceValue: 2000,
             },
         }
 
@@ -655,28 +655,28 @@ describe('useCusipSorting', () => {
 
         // Expected order by individual adjusted principals: 1100, 2200, 6600
         // But this will FAIL because the current implementation keys cusipData by cusipId,
-        // so all instances will get undefined cusipData and fall back to originalPrincipal (1000, 2000, 6000)
+        // so all instances will get undefined cusipData and fall back to faceValue (1000, 2000, 6000)
 
         // What we WANT (sorted by adjusted principal):
         // expect(sortedCusips[0].uniqueId).toBe('912810SB5-1753042539613-pv0lm9cfq') // adjustedPrincipal: 1100
         // expect(sortedCusips[1].uniqueId).toBe('912810SB5-1753042723807-6qv0r0vbe') // adjustedPrincipal: 2200
         // expect(sortedCusips[2].uniqueId).toBe('912810SB5-1753042718263-s5ddnuef8') // adjustedPrincipal: 6600
 
-        // What we ACTUALLY GET (sorted by originalPrincipal because cusipData lookup fails):
-        expect(sortedCusips[0].originalPrincipal).toBe('1000') // Falls back to originalPrincipal
-        expect(sortedCusips[1].originalPrincipal).toBe('2000') // Falls back to originalPrincipal
-        expect(sortedCusips[2].originalPrincipal).toBe('6000') // Falls back to originalPrincipal
+        // What we ACTUALLY GET (sorted by faceValue because cusipData lookup fails):
+        expect(sortedCusips[0].faceValue).toBe('1000') // Falls back to faceValue
+        expect(sortedCusips[1].faceValue).toBe('2000') // Falls back to faceValue
+        expect(sortedCusips[2].faceValue).toBe('6000') // Falls back to faceValue
 
-        // This test shows the bug: we're getting originalPrincipal order instead of adjustedPrincipal order
+        // This test shows the bug: we're getting faceValue order instead of adjustedPrincipal order
         // because the cusipData lookup by cusipId fails when data is keyed by uniqueId
     })
 
-    test('demonstrates current behavior: duplicate CUSIPs fall back to originalPrincipal sorting', () => {
+    test('demonstrates current behavior: duplicate CUSIPs fall back to faceValue sorting', () => {
         // This test shows what actually happens with the current implementation
         const duplicateCusips = [
-            { cusipId: '912810SB5', originalPrincipal: '1000', uniqueId: '912810SB5-first' },
-            { cusipId: '912810SB5', originalPrincipal: '6000', uniqueId: '912810SB5-second' },
-            { cusipId: '912810SB5', originalPrincipal: '2000', uniqueId: '912810SB5-third' },
+            { cusipId: '912810SB5', faceValue: '1000', uniqueId: '912810SB5-first' },
+            { cusipId: '912810SB5', faceValue: '6000', uniqueId: '912810SB5-second' },
+            { cusipId: '912810SB5', faceValue: '2000', uniqueId: '912810SB5-third' },
         ]
 
         // Data is keyed by uniqueId (what we want) but sorting looks up by cusipId (the bug)
@@ -696,25 +696,25 @@ describe('useCusipSorting', () => {
 
         const sortedCusips = result.current.sortedCusips
 
-        // Current behavior: can't find cusipData by cusipId, so falls back to originalPrincipal
-        // Order will be: 1000, 2000, 6000 (originalPrincipal sorting)
-        expect(sortedCusips[0].originalPrincipal).toBe('1000') // Fallback behavior
-        expect(sortedCusips[1].originalPrincipal).toBe('2000') // Fallback behavior
-        expect(sortedCusips[2].originalPrincipal).toBe('6000') // Fallback behavior
+        // Current behavior: can't find cusipData by cusipId, so falls back to faceValue
+        // Order will be: 1000, 2000, 6000 (faceValue sorting)
+        expect(sortedCusips[0].faceValue).toBe('1000') // Fallback behavior
+        expect(sortedCusips[1].faceValue).toBe('2000') // Fallback behavior
+        expect(sortedCusips[2].faceValue).toBe('6000') // Fallback behavior
 
-        // This confirms the bug: sorting is using originalPrincipal instead of adjustedPrincipal
+        // This confirms the bug: sorting is using faceValue instead of adjustedPrincipal
         // because cusipData lookup by cusipId fails when data is keyed by uniqueId
     })
 
     test('FAILING TEST: proves we need uniqueId lookup for individual adjusted principals', () => {
         // This test will FAIL to prove the bug exists
         const duplicateCusips = [
-            { cusipId: '912810SB5', originalPrincipal: '5000', uniqueId: 'first' }, // Original: 5000
-            { cusipId: '912810SB5', originalPrincipal: '1000', uniqueId: 'second' }, // Original: 1000
-            { cusipId: '912810SB5', originalPrincipal: '3000', uniqueId: 'third' }, // Original: 3000
+            { cusipId: '912810SB5', faceValue: '5000', uniqueId: 'first' }, // Original: 5000
+            { cusipId: '912810SB5', faceValue: '1000', uniqueId: 'second' }, // Original: 1000
+            { cusipId: '912810SB5', faceValue: '3000', uniqueId: 'third' }, // Original: 3000
         ]
 
-        // cusipData keyed by uniqueId with adjusted principals in REVERSE order from originalPrincipal
+        // cusipData keyed by uniqueId with adjusted principals in REVERSE order from faceValue
         const cusipDataByUniqueId = {
             first: { adjustedPrincipal: 1000 }, // Lowest adjusted (should be first)
             second: { adjustedPrincipal: 9000 }, // Highest adjusted (should be last)
@@ -737,7 +737,7 @@ describe('useCusipSorting', () => {
         expect(sortedCusips[1].uniqueId).toBe('third') // adjustedPrincipal: 5000 (middle)
         expect(sortedCusips[2].uniqueId).toBe('second') // adjustedPrincipal: 9000 (highest)
 
-        // This test will FAIL because current implementation sorts by originalPrincipal: 1000, 3000, 5000
-        // Actual order will be: second, third, first (by originalPrincipal, not adjustedPrincipal)
+        // This test will FAIL because current implementation sorts by faceValue: 1000, 3000, 5000
+        // Actual order will be: second, third, first (by faceValue, not adjustedPrincipal)
     })
 })

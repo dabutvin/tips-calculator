@@ -30,8 +30,8 @@ export const validateCusipData = (data) => {
         if (!item.cusipId || typeof item.cusipId !== 'string') {
             return { valid: false, error: `Invalid cusipId at index ${i}` }
         }
-        if (!item.originalPrincipal || isNaN(Number(item.originalPrincipal))) {
-            return { valid: false, error: `Invalid originalPrincipal at index ${i}` }
+        if (!item.faceValue || isNaN(Number(item.faceValue))) {
+            return { valid: false, error: `Invalid faceValue at index ${i}` }
         }
     }
 

@@ -32,7 +32,7 @@ const getCurrentOrFinalEntry = (cpiEntries, isMature) => {
 
 export default function CusipDetails({
     cusip,
-    originalPrincipal,
+    faceValue,
     isCollapsed = true,
     onToggle,
     onRemove,
@@ -68,9 +68,7 @@ export default function CusipDetails({
                 let relevantEntry = getCurrentOrFinalEntry(cpiEntriesResponse, securityIsMature)
                 setCurrentCpiEntry(relevantEntry)
 
-                const adjustedPrincipalValue = (
-                    relevantEntry?.dailyIndex * originalPrincipal
-                ).toFixed(2)
+                const adjustedPrincipalValue = (relevantEntry?.dailyIndex * faceValue).toFixed(2)
                 setAdjustedPrincipal(adjustedPrincipalValue)
 
                 // Notify parent component of the data for sorting
@@ -79,7 +77,7 @@ export default function CusipDetails({
                         cusipId: cusip,
                         maturityDate: securityDetailsResponse?.maturityDate,
                         adjustedPrincipal: parseFloat(adjustedPrincipalValue),
-                        originalPrincipal: parseFloat(originalPrincipal),
+                        faceValue: parseFloat(faceValue),
                         interestRate: parseFloat(securityDetailsResponse?.interestRate),
                         isMature: securityIsMature,
                         uniqueId: uniqueId,
@@ -93,7 +91,7 @@ export default function CusipDetails({
                                 indexDate: new Date(entry.indexDate).toLocaleDateString(),
                                 dailyIndex: Number(entry.dailyIndex),
                                 dailyAdjustedPrincipal: Number(
-                                    originalPrincipal * entry.dailyIndex,
+                                    faceValue * entry.dailyIndex,
                                 ).toFixed(2),
                             }
                         })
@@ -117,7 +115,7 @@ export default function CusipDetails({
         } else {
             setIsLoading(false)
         }
-    }, [cusip, originalPrincipal, onDataUpdate])
+    }, [cusip, faceValue, onDataUpdate])
 
     if (isLoading) {
         return <div style={{ padding: '20px' }}>Loading ...</div>
@@ -150,8 +148,8 @@ export default function CusipDetails({
                             <td>{cusip}</td>
                         </tr>
                         <tr>
-                            <td>Original Principal:</td>
-                            <td>${originalPrincipal}</td>
+                            <td>Face Value:</td>
+                            <td>${faceValue}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -184,8 +182,8 @@ export default function CusipDetails({
                         </div>
                         <div className={styles.collapsedMobileRowSecondary}>
                             <div className={styles.collapsedField}>
-                                <span className={styles.collapsedLabel}>Original:</span>
-                                <span className={styles.collapsedValue}>${originalPrincipal}</span>
+                                <span className={styles.collapsedLabel}>Face Value:</span>
+                                <span className={styles.collapsedValue}>${faceValue}</span>
                             </div>
                             <div className={styles.collapsedField}>
                                 <span className={styles.collapsedLabel}>Maturity:</span>
@@ -240,8 +238,8 @@ export default function CusipDetails({
                         </div>
                         <div className={styles.collapsedMobileRowSecondary}>
                             <div className={styles.collapsedField}>
-                                <span className={styles.collapsedLabel}>Original:</span>
-                                <span className={styles.collapsedValue}>${originalPrincipal}</span>
+                                <span className={styles.collapsedLabel}>Face Value:</span>
+                                <span className={styles.collapsedValue}>${faceValue}</span>
                             </div>
                             <div className={styles.collapsedField}>
                                 <span className={styles.collapsedLabel}>Maturity:</span>
@@ -278,8 +276,8 @@ export default function CusipDetails({
                         <td>${adjustedPrincipal}</td>
                     </tr>
                     <tr>
-                        <td>Original Principal:</td>
-                        <td>${originalPrincipal}</td>
+                        <td>Face Value:</td>
+                        <td>${faceValue}</td>
                     </tr>
                     <tr>
                         <td>{isMature ? 'Final Index Ratio:' : 'Current Index Ratio:'}</td>
@@ -368,7 +366,7 @@ export default function CusipDetails({
                                                 {new Date(entry.indexDate).toLocaleDateString()}
                                             </td>
                                             <td>{entry.dailyIndex}</td>
-                                            <td>{`$${Number(entry.dailyIndex * originalPrincipal).toFixed(2)}`}</td>
+                                            <td>{`$${Number(entry.dailyIndex * faceValue).toFixed(2)}`}</td>
                                         </tr>
                                     ))}
                                 </tbody>

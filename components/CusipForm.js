@@ -2,17 +2,17 @@
 
 import React, { useState } from 'react'
 import styles from '../styles/CusipList.module.css'
-import { validateCusip, validateOriginalPrincipal } from '../utils/validation'
+import { validateCusip, validateFaceValue } from '../utils/validation'
 
 export default function CusipForm({ onAddCusip, onError }) {
     const [cusipError, setCusipError] = useState('')
-    const [originalPrincipalError, setOriginalPrincipalError] = useState('')
+    const [faceValueError, setFaceValueError] = useState('')
 
     const handleSubmit = (event) => {
         event.preventDefault()
 
         const cusipId = event.target['cusipId'].value.trim()
-        const originalPrincipal = event.target['originalPrincipal'].value.trim()
+        const faceValue = event.target['faceValue'].value.trim()
 
         // Validate CUSIP before submission
         const validationError = validateCusip(cusipId)
@@ -21,16 +21,16 @@ export default function CusipForm({ onAddCusip, onError }) {
             return
         }
 
-        // Validate original principal before submission
-        const originalPrincipalValidationError = validateOriginalPrincipal(originalPrincipal)
-        if (originalPrincipalValidationError) {
-            setOriginalPrincipalError(originalPrincipalValidationError)
+        // Validate face value before submission
+        const faceValueValidationError = validateFaceValue(faceValue)
+        if (faceValueValidationError) {
+            setFaceValueError(faceValueValidationError)
             return
         }
 
         const newCusip = {
             cusipId: cusipId,
-            originalPrincipal: originalPrincipal,
+            faceValue: faceValue,
         }
 
         // Call parent handler
@@ -42,7 +42,7 @@ export default function CusipForm({ onAddCusip, onError }) {
 
         // Reset form
         setCusipError('')
-        setOriginalPrincipalError('')
+        setFaceValueError('')
         event.target.reset()
 
         // Move focus back to CUSIP input
@@ -71,7 +71,7 @@ export default function CusipForm({ onAddCusip, onError }) {
                 </div>
                 <div>
                     <label>
-                        Original Principal:
+                        Face Value:
                         <div
                             style={{ position: 'relative', display: 'inline-block', width: '100%' }}
                         >
@@ -89,7 +89,7 @@ export default function CusipForm({ onAddCusip, onError }) {
                                 $
                             </span>
                             <input
-                                name="originalPrincipal"
+                                name="faceValue"
                                 type="number"
                                 placeholder="Enter dollar amount"
                                 className={styles.input}
@@ -98,9 +98,7 @@ export default function CusipForm({ onAddCusip, onError }) {
                             />
                         </div>
                     </label>
-                    {originalPrincipalError && (
-                        <div className={styles.error}>{originalPrincipalError}</div>
-                    )}
+                    {faceValueError && <div className={styles.error}>{faceValueError}</div>}
                 </div>
                 <button type="submit" className={styles.submitBtn}>
                     Add
