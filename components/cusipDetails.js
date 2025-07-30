@@ -94,19 +94,19 @@ export default function CusipDetails({
                     })
                 }
 
-                setCpiChartData(
-                    cpiEntries
-                        .map((entry) => {
-                            return {
-                                indexDate: new Date(entry.indexDate).toLocaleDateString(),
-                                dailyIndex: Number(entry.dailyIndex),
-                                dailyAdjustedPrincipal: Number(
-                                    faceValue * entry.dailyIndex,
-                                ).toFixed(2),
-                            }
-                        })
-                        .reverse(),
-                )
+                const chartData = cpiEntries
+                    .map((entry) => {
+                        return {
+                            indexDate: new Date(entry.indexDate).toLocaleDateString(),
+                            dailyIndex: Number(entry.dailyIndex),
+                            dailyAdjustedPrincipal: Number(
+                                (faceValue * entry.dailyIndex).toFixed(2),
+                            ),
+                        }
+                    })
+                    .reverse()
+
+                setCpiChartData(chartData)
             } catch (err) {
                 setError(err.message)
                 setCpiEntries(null)
@@ -332,7 +332,14 @@ export default function CusipDetails({
                                 return `${month}/${year}`
                             }}
                         />
-                        <YAxis type="number" tickFormatter={(value) => `$${value}`} />
+                        <YAxis
+                            type="number"
+                            domain={[
+                                (dataMin) => Math.floor(dataMin * 0.95),
+                                (dataMax) => Math.ceil(dataMax * 1.05),
+                            ]}
+                            tickFormatter={(value) => `$${value}`}
+                        />
                         <Tooltip formatter={(value) => [`$${value}`, 'Daily Adjusted Principal']} />
                         <ReferenceLine
                             x={new Date().toLocaleDateString()}
