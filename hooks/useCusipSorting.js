@@ -25,10 +25,10 @@ export function useCusipSorting(cusips, cusipData, onReorder) {
             } else if (sortBy === 'adjusted') {
                 aValue = aData?.adjustedPrincipal
                     ? Number(aData.adjustedPrincipal)
-                    : Number(a.originalPrincipal)
+                    : Number(a.faceValue)
                 bValue = bData?.adjustedPrincipal
                     ? Number(bData.adjustedPrincipal)
-                    : Number(b.originalPrincipal)
+                    : Number(b.faceValue)
             } else if (sortBy === 'interest') {
                 aValue = aData?.interestRate || 0
                 bValue = bData?.interestRate || 0

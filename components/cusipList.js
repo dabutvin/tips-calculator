@@ -45,7 +45,7 @@ export default function CusipList() {
     } = useCollapseState()
 
     const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
-    const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed (stores { uniqueId, cusipId, originalPrincipal })
+    const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed (stores { uniqueId, cusipId, faceValue })
     const [highlightedCusip, setHighlightedCusip] = useState(null) // Track CUSIP to highlight
     const shouldHighlightNext = useRef(false) // Flag to enable highlighting for next CUSIP
 
@@ -165,7 +165,7 @@ export default function CusipList() {
                 setCusipToRemove({
                     uniqueId,
                     cusipId: cusip?.cusipId || 'Unknown',
-                    originalPrincipal: cusip?.originalPrincipal || 'Unknown',
+                    faceValue: cusip?.faceValue || 'Unknown',
                 })
             }
         },
@@ -212,7 +212,7 @@ export default function CusipList() {
                 </div>
             )}
 
-            {sortedCusips.map(({ cusipId, originalPrincipal, uniqueId }, index) => (
+            {sortedCusips.map(({ cusipId, faceValue, uniqueId }, index) => (
                 <DraggableCusipCard
                     key={uniqueId}
                     index={index}
@@ -226,7 +226,7 @@ export default function CusipList() {
                 >
                     <MemoizedCusipDetails
                         cusip={cusipId}
-                        originalPrincipal={originalPrincipal}
+                        faceValue={faceValue}
                         onToggle={createToggleCallback(uniqueId)}
                         isCollapsed={getCollapsedState(uniqueId)}
                         onRemove={createRemoveCallback(uniqueId)}
@@ -238,7 +238,7 @@ export default function CusipList() {
 
             <ConfirmationDialog
                 isOpen={!!cusipToRemove}
-                message={`Are you sure you want to remove CUSIP ${cusipToRemove?.cusipId} (${cusipToRemove?.originalPrincipal ? `$${cusipToRemove.originalPrincipal}` : 'Unknown amount'}) from your list?`}
+                message={`Are you sure you want to remove CUSIP ${cusipToRemove?.cusipId} (${cusipToRemove?.faceValue ? `$${cusipToRemove.faceValue}` : 'Unknown amount'}) from your list?`}
                 confirmText="Remove"
                 cancelText="Cancel"
                 onConfirm={handleConfirmRemove}

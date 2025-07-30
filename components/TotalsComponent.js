@@ -7,31 +7,31 @@ export default function TotalsComponent({ cusipData }) {
     // Calculate totals from cusipData
     const calculateTotals = () => {
         if (!cusipData || Object.keys(cusipData).length === 0) {
-            return { totalCurrent: 0, totalOriginal: 0 }
+            return { totalCurrent: 0, totalFaceValue: 0 }
         }
 
         const totals = Object.values(cusipData).reduce(
             (acc, data) => {
-                if (data.adjustedPrincipal !== undefined && data.originalPrincipal !== undefined) {
+                if (data.adjustedPrincipal !== undefined && data.faceValue !== undefined) {
                     acc.totalCurrent += data.adjustedPrincipal
-                    acc.totalOriginal += data.originalPrincipal
+                    acc.totalFaceValue += data.faceValue
                 }
                 return acc
             },
-            { totalCurrent: 0, totalOriginal: 0 },
+            { totalCurrent: 0, totalFaceValue: 0 },
         )
 
         return totals
     }
 
-    const { totalCurrent, totalOriginal } = calculateTotals()
+    const { totalCurrent, totalFaceValue } = calculateTotals()
 
     // Don't render if no data
     if (!cusipData || Object.keys(cusipData).length === 0) {
         return null
     }
 
-    const gainLoss = totalCurrent - totalOriginal
+    const gainLoss = totalCurrent - totalFaceValue
     const isPositive = gainLoss >= 0
 
     return (
@@ -49,10 +49,10 @@ export default function TotalsComponent({ cusipData }) {
                     </span>
                 </div>
                 <div className={styles.totalItem}>
-                    <span className={styles.label}>Total Original:</span>
+                    <span className={styles.label}>Total Face Value:</span>
                     <span className={styles.value}>
                         $
-                        {totalOriginal.toLocaleString('en-US', {
+                        {totalFaceValue.toLocaleString('en-US', {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 0,
                         })}

@@ -20,26 +20,26 @@ export const validateCusip = (cusip) => {
 }
 
 /**
- * Validates that a value is a positive number for original principal
+ * Validates that a value is a positive number for face value
  * @param {string|number} value - The value to validate
  * @returns {string} - Empty string if valid, error message if invalid
  */
-export const validateOriginalPrincipal = (value) => {
+export const validateFaceValue = (value) => {
     if (!value) {
-        return 'Original principal is required'
+        return 'Face value is required'
     }
 
     const numValue = parseFloat(value)
     if (isNaN(numValue)) {
-        return 'Original principal must be a valid number'
+        return 'Face value must be a valid number'
     }
 
     if (numValue <= 0) {
-        return 'Original principal must be greater than zero'
+        return 'Face value must be greater than zero'
     }
 
     if (numValue % 100 !== 0) {
-        return 'Original principal must be divisible by 100'
+        return 'Face value must be divisible by 100'
     }
 
     return ''

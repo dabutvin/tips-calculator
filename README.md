@@ -1,9 +1,11 @@
 # TIPS (Treasury Inflation-Protected Securities) Calculator
 
-A Next.js application for looking up TIPS information and calculating adjusted principal values using Treasury Direct APIs. 
+A Next.js application for looking up TIPS information and calculating adjusted principal values using Treasury Direct APIs.
 This application deploys automatically to Netlify from the main branch.
 
 Live Calculator: https://tips-calculator.com/
+
+Bogleheads thread discussing this tool: https://www.bogleheads.org/forum/viewtopic.php?p=8458769
 
 ![Calculator](calculator.png)
 
@@ -15,12 +17,12 @@ This application helps investors calculate the current value of their TIPS inves
 
 TIPS have two key components:
 
-1. **Original Principal**: The face value of the security
+1. **Face Value**: The original face value of the security
 2. **Index Ratio**: A multiplier that adjusts the principal based on inflation
 
-The **Adjusted Principal** = Original Principal × Index Ratio
+The **Adjusted Principal** = Face Value × Index Ratio
 
-Interest payments are calculated on the adjusted principal, not the original principal.
+Interest payments are calculated on the adjusted principal, not the face value.
 
 ## Treasury Direct APIs
 
@@ -91,7 +93,7 @@ Using the CPI Index Data API for CUSIP `912810SG4`:
 ### Step 2: Calculate Adjusted Principal
 
 ```
-Adjusted Principal = Original Principal × Index Ratio
+Adjusted Principal = Face Value × Index Ratio
 Adjusted Principal = $1,000 × 1.01165 = $1,011.65
 ```
 
