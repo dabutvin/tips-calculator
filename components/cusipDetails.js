@@ -5,6 +5,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceLine } 
 
 import { useEffect, useState } from 'react'
 import { getCpiEntries, getSecurityDetails } from '../actions/treasuryApi'
+import EditableFaceValue from './EditableFaceValue'
 import styles from '../styles/CusipDetails.module.css'
 
 // Helper functions for maturity detection and CPI entry selection
@@ -37,6 +38,7 @@ export default function CusipDetails({
     onToggle,
     onRemove,
     onDataUpdate,
+    onFaceValueUpdate,
     uniqueId,
 }) {
     const [cpiEntries, setCpiEntries] = useState(null)
@@ -159,7 +161,9 @@ export default function CusipDetails({
                         </tr>
                         <tr>
                             <td>Face Value:</td>
-                            <td>${faceValue}</td>
+                            <td>
+                                <EditableFaceValue value={faceValue} onUpdate={onFaceValueUpdate} />
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -193,7 +197,11 @@ export default function CusipDetails({
                         <div className={styles.collapsedMobileRowSecondary}>
                             <div className={styles.collapsedField}>
                                 <span className={styles.collapsedLabel}>Face Value:</span>
-                                <span className={styles.collapsedValue}>${faceValue}</span>
+                                <EditableFaceValue
+                                    value={faceValue}
+                                    onUpdate={onFaceValueUpdate}
+                                    className={styles.collapsedValue}
+                                />
                             </div>
                             <div className={styles.collapsedField}>
                                 <span className={styles.collapsedLabel}>Maturity:</span>
@@ -249,7 +257,11 @@ export default function CusipDetails({
                         <div className={styles.collapsedMobileRowSecondary}>
                             <div className={styles.collapsedField}>
                                 <span className={styles.collapsedLabel}>Face Value:</span>
-                                <span className={styles.collapsedValue}>${faceValue}</span>
+                                <EditableFaceValue
+                                    value={faceValue}
+                                    onUpdate={onFaceValueUpdate}
+                                    className={styles.collapsedValue}
+                                />
                             </div>
                             <div className={styles.collapsedField}>
                                 <span className={styles.collapsedLabel}>Maturity:</span>
@@ -287,7 +299,9 @@ export default function CusipDetails({
                     </tr>
                     <tr>
                         <td>Face Value:</td>
-                        <td>${faceValue}</td>
+                        <td>
+                            <EditableFaceValue value={faceValue} onUpdate={onFaceValueUpdate} />
+                        </td>
                     </tr>
                     <tr>
                         <td>{isMature ? 'Final Index Ratio:' : 'Current Index Ratio:'}</td>

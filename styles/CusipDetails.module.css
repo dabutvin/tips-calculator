@@ -145,6 +145,74 @@
     color: #dc3545;
 }
 
+.editBtn {
+    background: transparent;
+    color: #666;
+    border: none;
+    border-radius: 4px;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.faceValueContainer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cusipDetails input[type='text'].editableInput {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px 4px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: 80px;
+}
+
+.editableInput:focus {
+    outline: none;
+    border-color: #0070f3;
+}
+
+.inputWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.dollarPrefix {
+    position: absolute;
+    left: 8px;
+    top: 52%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    font-weight: 600;
+    z-index: 1;
+}
+
+.editActions {
+    display: flex;
+    gap: 0;
+}
+
+.saveBtn,
+.cancelBtn {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.cancelBtn {
+    color: red;
+}
+
 .retainedCollapsedView {
     flex: 1;
     padding: 0;
