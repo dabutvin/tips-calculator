@@ -9,6 +9,7 @@ import ConfirmationDialog from '../components/ConfirmationDialog'
 import DraggableCusipCard from '../components/DraggableCusipCard'
 import Tooltip from '../components/Tooltip'
 import TotalsComponent from '../components/TotalsComponent'
+import SelectedDateComponent from '../components/SelectedDateComponent'
 import styles from '../styles/CusipList.module.css'
 import { useCusipSorting } from '../hooks/useCusipSorting'
 import { useCusipStorage } from '../hooks/useCusipStorage'
@@ -48,6 +49,7 @@ export default function CusipList() {
     const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
     const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed (stores { uniqueId, cusipId, faceValue })
     const [highlightedCusip, setHighlightedCusip] = useState(null) // Track CUSIP to highlight
+    const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for CPI calculations
     const shouldHighlightNext = useRef(false) // Flag to enable highlighting for next CUSIP
 
     // Use the clear all data hook
@@ -236,9 +238,14 @@ export default function CusipList() {
                             updateCusipFaceValue(uniqueId, newFaceValue)
                         }
                         uniqueId={uniqueId}
+                        selectedDate={selectedDate}
                     />
                 </DraggableCusipCard>
             ))}
+
+            <SelectedDateComponent selectedDate={selectedDate} onDateChange={setSelectedDate} />
+
+            <TotalsComponent cusipData={cusipData} />
 
             <ConfirmationDialog
                 isOpen={!!cusipToRemove}
@@ -257,8 +264,6 @@ export default function CusipList() {
                 onConfirm={handleClearAllData}
                 onCancel={handleCancelClear}
             />
-
-            <TotalsComponent cusipData={cusipData} />
         </div>
     )
 }
