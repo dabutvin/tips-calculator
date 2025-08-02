@@ -23,7 +23,9 @@ export function useDateEditor(currentDate, onUpdate) {
             return
         }
 
-        const newDate = new Date(tempValue)
+        // Parse the date string manually to avoid timezone issues
+        const [year, month, day] = tempValue.split('-').map(Number)
+        const newDate = new Date(year, month - 1, day) // month is 0-indexed
         if (isNaN(newDate.getTime())) {
             alert('Please select a valid date')
             return
@@ -68,6 +70,14 @@ export function useDateEditor(currentDate, onUpdate) {
         setTempValue(e.target.value)
     }
 
+    const handleToday = () => {
+        const today = new Date()
+        if (onUpdate) {
+            onUpdate(today)
+        }
+        setIsEditing(false)
+    }
+
     return {
         isEditing,
         tempValue,
@@ -76,5 +86,6 @@ export function useDateEditor(currentDate, onUpdate) {
         handleCancel,
         handleKeyDown,
         handleInputChange,
+        handleToday,
     }
 }

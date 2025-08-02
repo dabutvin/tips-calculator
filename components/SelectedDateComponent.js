@@ -14,6 +14,7 @@ export default function SelectedDateComponent({ selectedDate, onDateChange }) {
         handleCancel,
         handleKeyDown,
         handleInputChange,
+        handleToday,
     } = useDateEditor(selectedDate, onDateChange)
 
     const formatDateForDisplay = (date) => {
@@ -48,6 +49,9 @@ export default function SelectedDateComponent({ selectedDate, onDateChange }) {
                                 </button>
                                 <button onClick={handleCancel} className={editStyles.cancelBtn}>
                                     ✕
+                                </button>
+                                <button onClick={handleToday} className={editStyles.saveBtn}>
+                                    Today
                                 </button>
                             </div>
                         </div>
