@@ -127,6 +127,40 @@ export function useCusipStorage() {
         [storageAvailable],
     )
 
+    // Update CUSIP face value
+    const updateCusipFaceValue = useCallback(
+        (uniqueId, newFaceValue) => {
+            // Update local state
+            setCusips((prev) =>
+                prev.map((cusip) =>
+                    cusip.uniqueId === uniqueId ? { ...cusip, faceValue: newFaceValue } : cusip,
+                ),
+            )
+
+            // Save to localStorage if available
+            if (storageAvailable) {
+                const currentData = loadCusipsFromStorage()
+                if (currentData.success) {
+                    const updatedCusips = currentData.data.map((cusip) =>
+                        cusip.uniqueId === uniqueId ? { ...cusip, faceValue: newFaceValue } : cusip,
+                    )
+                    const result = saveCusipsToStorage(updatedCusips)
+                    if (!result.success) {
+                        console.error(
+                            'Failed to save updated face value to localStorage:',
+                            result.error,
+                        )
+                        setError('Failed to save updated face value')
+                        return false
+                    }
+                }
+            }
+
+            return true
+        },
+        [storageAvailable],
+    )
+
     // Clear error
     const clearError = useCallback(() => {
         setError(null)
@@ -141,6 +175,7 @@ export function useCusipStorage() {
         addCusip,
         removeCusip,
         reorderCusips,
+        updateCusipFaceValue,
         clearError,
     }
 }

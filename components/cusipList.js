@@ -30,6 +30,7 @@ export default function CusipList() {
         addCusip,
         removeCusip,
         reorderCusips,
+        updateCusipFaceValue,
         clearError: clearStorageError,
         setCusips,
     } = useCusipStorage()
@@ -231,6 +232,9 @@ export default function CusipList() {
                         isCollapsed={getCollapsedState(uniqueId)}
                         onRemove={createRemoveCallback(uniqueId)}
                         onDataUpdate={handleCusipDataUpdate}
+                        onFaceValueUpdate={(newFaceValue) =>
+                            updateCusipFaceValue(uniqueId, newFaceValue)
+                        }
                         uniqueId={uniqueId}
                     />
                 </DraggableCusipCard>
