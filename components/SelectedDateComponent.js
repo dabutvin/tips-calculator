@@ -5,7 +5,7 @@ import { useDateEditor } from '../hooks/useDateEditor'
 import styles from '../styles/SelectedDateComponent.module.css'
 import editStyles from '../styles/CusipDetails.module.css'
 
-export default function SelectedDateComponent({ selectedDate, onDateChange }) {
+export default function SelectedDateComponent({ selectedDate, onDateChange, maxDate }) {
     const {
         isEditing,
         tempValue,
@@ -15,7 +15,7 @@ export default function SelectedDateComponent({ selectedDate, onDateChange }) {
         handleKeyDown,
         handleInputChange,
         handleToday,
-    } = useDateEditor(selectedDate, onDateChange)
+    } = useDateEditor(selectedDate, onDateChange, maxDate)
 
     const formatDateForDisplay = (date) => {
         return date.toLocaleDateString('en-US', {

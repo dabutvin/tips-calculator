@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, memo, useRef } from 'react'
+import React, { useState, useEffect, useCallback, memo, useRef, useMemo } from 'react'
 import CusipDetails from '../components/cusipDetails'
 import CusipForm from '../components/CusipForm'
 import Notification from '../components/Notification'
@@ -45,6 +45,27 @@ export default function CusipList() {
     const [highlightedCusip, setHighlightedCusip] = useState(null) // Track CUSIP to highlight
     const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for CPI calculations
     const shouldHighlightNext = useRef(false) // Flag to enable highlighting for next CUSIP
+
+    // Compute max date from all CUSIP data
+    const maxDate = useMemo(() => {
+        let maxDate = new Date()
+
+        // Check all cusip data for CPI entries and find the latest indexDate
+        Object.values(cusipData).forEach((cusipInfo) => {
+            if (cusipInfo?.cpiEntries) {
+                cusipInfo.cpiEntries.forEach((entry) => {
+                    if (entry.indexDate) {
+                        const indexDate = new Date(entry.indexDate)
+                        if (indexDate > maxDate) {
+                            maxDate = indexDate
+                        }
+                    }
+                })
+            }
+        })
+
+        return maxDate
+    }, [cusipData])
 
     // Use the clear all data hook
     const {
@@ -194,6 +215,7 @@ export default function CusipList() {
                         <SelectedDateComponent
                             selectedDate={selectedDate}
                             onDateChange={setSelectedDate}
+                            maxDate={maxDate}
                         />
                     </div>
                 </div>

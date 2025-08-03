@@ -121,6 +121,7 @@ export default function CusipDetails({
                         interestRate: parseFloat(securityDetails?.interestRate),
                         isMature: securityIsMature,
                         uniqueId: uniqueId,
+                        cpiEntries: cpiEntries, // Include CPI entries for date validation
                     })
                 }
 

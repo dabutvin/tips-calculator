@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export function useDateEditor(currentDate, onUpdate) {
+export function useDateEditor(currentDate, onUpdate, maxDate) {
     const [isEditing, setIsEditing] = useState(false)
     const [tempValue, setTempValue] = useState('')
 
@@ -31,12 +31,20 @@ export function useDateEditor(currentDate, onUpdate) {
             return
         }
 
-        // Check if date is not too far in the future (reasonable limit)
-        const today = new Date()
-        const maxDate = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())
-        
-        if (newDate > maxDate) {
-            alert('Please select a date within the next year')
+        // Use the provided maxDate (computed from CUSIP data or fallback)
+        const validationMaxDate =
+            maxDate ||
+            new Date(new Date().getFullYear() + 1, new Date().getMonth(), new Date().getDate())
+
+        if (newDate > validationMaxDate) {
+            const maxDateFormatted = validationMaxDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            })
+            alert(
+                `Please select a date within the available data range. The latest available date is ${maxDateFormatted}`,
+            )
             return
         }
 
