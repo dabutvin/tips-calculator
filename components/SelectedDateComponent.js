@@ -31,7 +31,7 @@ export default function SelectedDateComponent({ selectedDate, onDateChange }) {
             <div className={styles.dateContainer}>
                 <div className={styles.dateGrid}>
                     <div className={styles.dateItem}>
-                        <span>Selected Date:</span>
+                        <span>Date:</span>
                         <div className={editStyles.faceValueContainer}>
                             <div className={editStyles.inputWrapper}>
                                 <input
@@ -65,7 +65,7 @@ export default function SelectedDateComponent({ selectedDate, onDateChange }) {
         <div className={styles.dateContainer}>
             <div className={styles.dateGrid}>
                 <div className={styles.dateItem}>
-                    <span>Selected Date:</span>
+                    <span>Date:</span>
                     <span className={styles.value}>
                         <div className={editStyles.faceValueContainer}>
                             <span>{formatDateForDisplay(selectedDate)}</span>

@@ -30,42 +30,24 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+    margin-bottom: -10px;
     flex-wrap: wrap;
 }
 
 .actionButtons {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: space-between;
+    width: 100%;
     flex-wrap: wrap;
 }
 
 .clearButtonContainer {
     display: flex;
+    margin-top: 3rem;
     align-items: center;
     gap: 0.25rem;
-}
-
-.toggleAllBtn {
-    background: #f8f9fa;
-    color: #222;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    min-width: 120px;
-    white-space: nowrap;
-    height: 36px;
-    box-sizing: border-box;
-}
-
-.toggleAllBtn:hover {
-    background: #e9ecef;
-    border-color: #0070f3;
 }
 
 .clearAllBtn {
@@ -97,30 +79,19 @@
 }
 
 .sortSelect {
-    background: #f8f9fa;
+    background: none;
+    border: none;
+    font-size: 0.8rem;
     color: #222;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: none;
     cursor: pointer;
-    transition: all 0.2s;
     outline: none;
-    min-width: 200px;
-    height: 36px;
-    box-sizing: border-box;
-}
-
-.sortSelect:hover {
-    background: #e9ecef;
-    border-color: #0070f3;
-}
-
-.sortSelect:focus {
-    border-color: #0070f3;
-    background: #fff;
-    box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: width 0.2s ease;
+    min-width: auto;
 }
 
 .cusipList form {
@@ -388,40 +359,30 @@
         flex-wrap: wrap;
         width: 100%;
         gap: 0.75rem;
+        justify-content: space-between;
     }
     .sortControls {
-        flex-basis: 100%;
-        width: 100%;
+        flex: 1;
         align-items: center;
         gap: 0.5rem;
-        order: 3;
-    }
-    .toggleAllBtn {
-        flex: 1;
         order: 1;
+        min-width: 0;
     }
+
     .clearButtonContainer {
         flex: 1;
         order: 2;
     }
     .sortControls label {
-        font-size: 0.9rem;
         margin: 0;
         white-space: nowrap;
         flex-shrink: 0;
     }
     .sortSelect {
-        flex: 1;
-        min-width: 0;
-        font-size: 0.85rem;
-        padding: 0.6rem 1rem;
+        flex: 0 0 auto;
+        min-width: auto;
     }
-    .toggleAllBtn {
-        width: 100%;
-        min-width: unset;
-        padding: 0.6rem 1rem;
-        font-size: 0.85rem;
-    }
+
     .clearButtonContainer {
         width: 100%;
         justify-content: space-between;

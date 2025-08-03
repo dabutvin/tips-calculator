@@ -37,14 +37,8 @@ export default function CusipList() {
     } = useCusipStorage()
 
     const { notification, showNotification, clearNotification } = useNotification()
-    const {
-        allCollapsed,
-        toggleAllCollapsed,
-        addCollapsedState,
-        removeCollapsedState,
-        getCollapsedState,
-        createToggleCallback,
-    } = useCollapseState()
+    const { addCollapsedState, removeCollapsedState, getCollapsedState, createToggleCallback } =
+        useCollapseState()
 
     const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
     const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed (stores { uniqueId, cusipId, faceValue })
@@ -196,21 +190,11 @@ export default function CusipList() {
                             sortDirection={sortDirection}
                             onSortChange={handleSortChange}
                         />
-                        <button
-                            onClick={() => toggleAllCollapsed(cusips)}
-                            className={styles.toggleAllBtn}
-                        >
-                            {allCollapsed ? 'Expand All' : 'Collapse All'}
-                        </button>
-                        <div className={styles.clearButtonContainer}>
-                            <button
-                                onClick={handleClearAllDataClick}
-                                className={styles.clearAllBtn}
-                            >
-                                Clear All Data
-                            </button>
-                            <Tooltip content="Data is stored only in your browser">ℹ️</Tooltip>
-                        </div>
+
+                        <SelectedDateComponent
+                            selectedDate={selectedDate}
+                            onDateChange={setSelectedDate}
+                        />
                     </div>
                 </div>
             )}
@@ -243,8 +227,6 @@ export default function CusipList() {
                 </DraggableCusipCard>
             ))}
 
-            <SelectedDateComponent selectedDate={selectedDate} onDateChange={setSelectedDate} />
-
             <TotalsComponent cusipData={cusipData} />
 
             <ConfirmationDialog
@@ -264,6 +246,13 @@ export default function CusipList() {
                 onConfirm={handleClearAllData}
                 onCancel={handleCancelClear}
             />
+
+            <div className={styles.clearButtonContainer}>
+                <button onClick={handleClearAllDataClick} className={styles.clearAllBtn}>
+                    Clear All Data
+                </button>
+                <Tooltip content="Data is stored only in your browser">ℹ️</Tooltip>
+            </div>
         </div>
     )
 }
