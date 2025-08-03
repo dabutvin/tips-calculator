@@ -1,40 +1,36 @@
 'use client'
 
 import styles from '../styles/CusipList.module.css'
+import Dropdown from './Dropdown'
 
 export default function SortControl({ sortBy, sortDirection, onSortChange }) {
+    // Define sort options for the dropdown
+    const sortOptions = [
+        { value: 'maturity-asc', label: 'Maturity Date (asc)' },
+        { value: 'maturity-desc', label: 'Maturity Date (desc)' },
+        { value: 'adjusted-asc', label: 'Value (asc)' },
+        { value: 'adjusted-desc', label: 'Value (desc)' },
+        { value: 'interest-asc', label: 'Interest (asc)' },
+        { value: 'interest-desc', label: 'Interest (desc)' },
+        { value: 'entry-asc', label: 'Manual' },
+    ]
+
+    const currentValue = `${sortBy}-${sortDirection}`
+
+    const handleSortChange = (newValue) => {
+        const [newSortBy, newSortDirection] = newValue.split('-')
+        onSortChange(newSortBy, newSortDirection)
+    }
+
     return (
         <div className={styles.sortControls}>
-            <label
-                htmlFor="sortSelect"
-                style={{
-                    fontSize: '0.75rem',
-                    color: '#666',
-                    fontWeight: 500,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                    marginBottom: '0',
-                }}
-            >
-                Sort by:
-            </label>
-            <select
+            <Dropdown
+                label="Sort by:"
                 id="sortSelect"
-                value={`${sortBy}-${sortDirection}`}
-                onChange={(e) => {
-                    const [newSortBy, newSortDirection] = e.target.value.split('-')
-                    onSortChange(newSortBy, newSortDirection)
-                }}
-                className={styles.sortSelect}
-            >
-                <option value="maturity-asc">Maturity Date (asc)</option>
-                <option value="maturity-desc">Maturity Date (desc)</option>
-                <option value="adjusted-asc">Value (asc)</option>
-                <option value="adjusted-desc">Value (desc)</option>
-                <option value="interest-asc">Interest (asc)</option>
-                <option value="interest-desc">Interest (desc)</option>
-                <option value="entry-asc">Manual</option>
-            </select>
+                options={sortOptions}
+                value={currentValue}
+                onChange={handleSortChange}
+            />
         </div>
     )
 }
