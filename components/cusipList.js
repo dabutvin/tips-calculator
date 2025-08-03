@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, memo, useRef } from 'react'
+import React, { useState, useEffect, useCallback, memo, useRef, useMemo } from 'react'
 import CusipDetails from '../components/cusipDetails'
 import CusipForm from '../components/CusipForm'
 import Notification from '../components/Notification'
@@ -9,6 +9,7 @@ import ConfirmationDialog from '../components/ConfirmationDialog'
 import DraggableCusipCard from '../components/DraggableCusipCard'
 import Tooltip from '../components/Tooltip'
 import TotalsComponent from '../components/TotalsComponent'
+import SelectedDateComponent from '../components/SelectedDateComponent'
 import styles from '../styles/CusipList.module.css'
 import { useCusipSorting } from '../hooks/useCusipSorting'
 import { useCusipStorage } from '../hooks/useCusipStorage'
@@ -36,19 +37,35 @@ export default function CusipList() {
     } = useCusipStorage()
 
     const { notification, showNotification, clearNotification } = useNotification()
-    const {
-        allCollapsed,
-        toggleAllCollapsed,
-        addCollapsedState,
-        removeCollapsedState,
-        getCollapsedState,
-        createToggleCallback,
-    } = useCollapseState()
+    const { addCollapsedState, removeCollapsedState, getCollapsedState, createToggleCallback } =
+        useCollapseState()
 
     const [cusipData, setCusipData] = useState({}) // Store data from CusipDetails components
     const [cusipToRemove, setCusipToRemove] = useState(null) // Track CUSIP to be removed (stores { uniqueId, cusipId, faceValue })
     const [highlightedCusip, setHighlightedCusip] = useState(null) // Track CUSIP to highlight
+    const [selectedDate, setSelectedDate] = useState(new Date()) // Selected date for CPI calculations
     const shouldHighlightNext = useRef(false) // Flag to enable highlighting for next CUSIP
+
+    // Compute max date from all CUSIP data
+    const maxDate = useMemo(() => {
+        let maxDate = new Date()
+
+        // Check all cusip data for CPI entries and find the latest indexDate
+        Object.values(cusipData).forEach((cusipInfo) => {
+            if (cusipInfo?.cpiEntries) {
+                cusipInfo.cpiEntries.forEach((entry) => {
+                    if (entry.indexDate) {
+                        const indexDate = new Date(entry.indexDate)
+                        if (indexDate > maxDate) {
+                            maxDate = indexDate
+                        }
+                    }
+                })
+            }
+        })
+
+        return maxDate
+    }, [cusipData])
 
     // Use the clear all data hook
     const {
@@ -194,21 +211,12 @@ export default function CusipList() {
                             sortDirection={sortDirection}
                             onSortChange={handleSortChange}
                         />
-                        <button
-                            onClick={() => toggleAllCollapsed(cusips)}
-                            className={styles.toggleAllBtn}
-                        >
-                            {allCollapsed ? 'Expand All' : 'Collapse All'}
-                        </button>
-                        <div className={styles.clearButtonContainer}>
-                            <button
-                                onClick={handleClearAllDataClick}
-                                className={styles.clearAllBtn}
-                            >
-                                Clear All Data
-                            </button>
-                            <Tooltip content="Data is stored only in your browser">ℹ️</Tooltip>
-                        </div>
+
+                        <SelectedDateComponent
+                            selectedDate={selectedDate}
+                            onDateChange={setSelectedDate}
+                            maxDate={maxDate}
+                        />
                     </div>
                 </div>
             )}
@@ -236,9 +244,12 @@ export default function CusipList() {
                             updateCusipFaceValue(uniqueId, newFaceValue)
                         }
                         uniqueId={uniqueId}
+                        selectedDate={selectedDate}
                     />
                 </DraggableCusipCard>
             ))}
+
+            <TotalsComponent cusipData={cusipData} />
 
             <ConfirmationDialog
                 isOpen={!!cusipToRemove}
@@ -258,7 +269,12 @@ export default function CusipList() {
                 onCancel={handleCancelClear}
             />
 
-            <TotalsComponent cusipData={cusipData} />
+            <div className={styles.clearButtonContainer}>
+                <button onClick={handleClearAllDataClick} className={styles.clearAllBtn}>
+                    Clear All Data
+                </button>
+                <Tooltip content="Data is stored only in your browser">ℹ️</Tooltip>
+            </div>
         </div>
     )
 }

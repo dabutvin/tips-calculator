@@ -411,7 +411,7 @@
     .retainedCollapsedView .collapsedContent > .collapsedField:last-child {
         display: none;
     }
-    
+
     .editBtn {
         display: none;
     }

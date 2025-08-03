@@ -24,9 +24,7 @@ export default function EditableFaceValue({
         return (
             <div className={styles.faceValueContainer}>
                 <div className={styles.inputWrapper}>
-                    {showDollarSign && (
-                        <span className={styles.dollarPrefix}>$</span>
-                    )}
+                    {showDollarSign && <span className={styles.dollarPrefix}>$</span>}
                     <input
                         type="text"
                         value={tempValue}

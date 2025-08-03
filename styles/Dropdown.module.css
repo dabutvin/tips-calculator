@@ -1,0 +1,162 @@
+/* Dropdown container */
+.dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0rem;
+    width: 100%;
+}
+
+/* Label styling consistent with existing patterns */
+.label {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Trigger wrapper for positioning */
+.triggerWrapper {
+    position: relative;
+    flex: 1;
+}
+
+/* Trigger button */
+.trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    color: #222;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    outline: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    font-family: inherit;
+    min-height: 2.5rem;
+    border: 1px solid transparent;
+}
+
+.trigger.open {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.trigger.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Value text */
+.value {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Arrow indicator */
+.arrow {
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    transition: transform 0.2s ease;
+    color: #666;
+}
+
+/* Options list */
+.options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+    margin: 0;
+    padding: 0.5rem 0;
+    list-style: none;
+    min-width: 150px;
+    z-index: 1000;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Individual option */
+.option {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    color: #222;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+    border: none;
+    outline: none;
+}
+
+.option:hover,
+.option.focused {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.option.selected {
+    background: rgba(59, 130, 246, 0.15);
+    font-weight: 600;
+}
+
+.option.selected.focused {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .trigger {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .option {
+        padding: 0.8rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .options {
+        max-height: 180px;
+    }
+}
+
+/* Focus visible for better accessibility */
+@media (prefers-reduced-motion: no-preference) {
+    .trigger,
+    .option {
+        transition: all 0.2s ease;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .trigger {
+        border: 1px solid #000;
+    }
+
+    .options {
+        border: 2px solid #000;
+    }
+
+    .option.focused,
+    .option:hover {
+        background: #000;
+        color: #fff;
+    }
+}
