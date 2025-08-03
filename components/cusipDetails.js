@@ -14,14 +14,25 @@ const isSecurityMature = (maturityDate, selectedDate) => {
     return selectedDate > new Date(maturityDate)
 }
 
+const isSecurityIssuedYet = (issueDate, selectedDate) => {
+    if (!issueDate) return true // If no issue date, assume it's issued
+    return selectedDate >= new Date(issueDate)
+}
+
 const getFinalCpiEntry = (cpiEntries) => {
     if (!cpiEntries || cpiEntries.length === 0) return null
     // CPI entries come sorted by date DESC, so first entry is the most recent (final entry chronologically)
     return cpiEntries[0]
 }
 
-const getCurrentOrFinalEntry = (cpiEntries, isMature, selectedDate) => {
-    if (isMature) {
+const getCurrentOrFinalEntry = (cpiEntries, isMature, isIssuedYet, selectedDate) => {
+    if (!isIssuedYet) {
+        // Security hasn't been issued yet, return a default entry with index ratio of 0
+        return {
+            dailyIndex: 0,
+            indexDate: format(selectedDate, 'YYYY-MM-DDT00:00:00'),
+        }
+    } else if (isMature) {
         return getFinalCpiEntry(cpiEntries)
     } else {
         // Current logic for finding the entry for the specified date
@@ -50,6 +61,7 @@ export default function CusipDetails({
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
     const [isMature, setIsMature] = useState(false)
+    const [isIssuedYet, setIsIssuedYet] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,10 +92,18 @@ export default function CusipDetails({
                 )
                 setIsMature(securityIsMature)
 
-                // Get appropriate CPI entry (current for active, final for mature)
+                // Detect if security has been issued yet
+                const securityIsIssued = isSecurityIssuedYet(
+                    securityDetails?.issueDate,
+                    selectedDate,
+                )
+                setIsIssuedYet(securityIsIssued)
+
+                // Get appropriate CPI entry (current for active, final for mature, default for pre-issue)
                 let relevantEntry = getCurrentOrFinalEntry(
                     cpiEntries,
                     securityIsMature,
+                    securityIsIssued,
                     selectedDate,
                 )
                 setCurrentCpiEntry(relevantEntry)
@@ -125,6 +145,7 @@ export default function CusipDetails({
                 setAdjustedPrincipal(null)
                 setCpiChartData(null)
                 setIsMature(false)
+                setIsIssuedYet(true)
             } finally {
                 setIsLoading(false)
             }
@@ -198,7 +219,9 @@ export default function CusipDetails({
                                     {isMature ? 'Mature:' : 'Current:'}
                                 </span>
                                 <span className={styles.collapsedValue}>
-                                    ${Number(adjustedPrincipal).toFixed(0)}
+                                    {!isIssuedYet
+                                        ? 'Pre-Issue'
+                                        : `$${Number(adjustedPrincipal).toFixed(0)}`}
                                 </span>
                             </div>
                         </div>
@@ -258,7 +281,9 @@ export default function CusipDetails({
                                     {isMature ? 'Mature:' : 'Current:'}
                                 </span>
                                 <span className={styles.collapsedValue}>
-                                    ${Number(adjustedPrincipal).toFixed(0)}
+                                    {!isIssuedYet
+                                        ? 'Pre-Issue'
+                                        : `$${Number(adjustedPrincipal).toFixed(0)}`}
                                 </span>
                             </div>
                         </div>
@@ -303,7 +328,7 @@ export default function CusipDetails({
                         <td>
                             {isMature ? 'Final Adjusted Principal:' : 'Current Adjusted Principal:'}
                         </td>
-                        <td>${adjustedPrincipal}</td>
+                        <td>{!isIssuedYet ? 'Pre-Issue' : `$${adjustedPrincipal}`}</td>
                     </tr>
                     <tr>
                         <td>Face Value:</td>
@@ -313,7 +338,7 @@ export default function CusipDetails({
                     </tr>
                     <tr>
                         <td>{isMature ? 'Final Index Ratio:' : 'Current Index Ratio:'}</td>
-                        <td>{Number(currentCpiEntry?.dailyIndex)}</td>
+                        <td>{!isIssuedYet ? 'Pre-Issue' : Number(currentCpiEntry?.dailyIndex)}</td>
                     </tr>
                     <tr>
                         <td>Security Term:</td>
