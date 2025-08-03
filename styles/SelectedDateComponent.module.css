@@ -37,6 +37,6 @@
 
 @media (max-width: 600px) {
     .dateContainer {
-        padding: 0 20px;
+        display: none;
     }
 }
