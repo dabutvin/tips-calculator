@@ -28,11 +28,16 @@ export async function getCpiEntries(cusip) {
 
     return {
         data: data.map((entry) => {
+            // TreasuryDirect renamed fields: the index ratio now lives in `indexRatio`
+            // (with `dailyIndex` returned as an empty string) and `updateTimeStamp`
+            // became `updatedTimestamp`. Support both shapes.
+            const dailyIndex = entry.indexRatio || entry.dailyIndex
+            const updateTimeStamp = entry.updatedTimestamp || entry.updateTimeStamp
             return {
-                uniqueKey: `${entry.cusip}_${entry.indexDate}_${entry.updateTimeStamp}`,
-                dailyIndex: entry.dailyIndex,
+                uniqueKey: `${entry.cusip}_${entry.indexDate}_${updateTimeStamp}`,
+                dailyIndex,
                 indexDate: entry.indexDate,
-                updateTimeStamp: entry.updateTimeStamp,
+                updateTimeStamp,
             }
         }),
     }
